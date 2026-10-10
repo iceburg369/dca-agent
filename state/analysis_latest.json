@@ -1,0 +1,592 @@
+{
+  "generated_at": "2026-10-07T13:26:41",
+  "llm_used": true,
+  "llm_calls": 0,
+  "llm_label": "Amazon Nova (global.amazon.nova-2-lite-v1:0)",
+  "dart_used": false,
+  "macro": {
+    "score": 49.0,
+    "regime": "neutral",
+    "signals": [
+      "코스피 200일선 위 (6,724 / 6,191)",
+      "코스피 고점 대비 -26% — 약세장 (분할매수에는 기회일 수 있음)",
+      "원/달러 60일 -4.8% — 원화 강세",
+      "미국 10년 금리 60일 +0.62%p 급등 (5.31%) — 성장주 할인율 부담",
+      "VIX 15.5 — 안정"
+    ]
+  },
+  "themes": {
+    "ai_semiconductor": {
+      "name": "반도체·AI 인프라 (HBM, 메모리)",
+      "stage": "current",
+      "score": 90.0,
+      "rel_strength_90d": 0.261,
+      "summary": ""
+    },
+    "power_grid": {
+      "name": "전력기기 (변압기·전력망)",
+      "stage": "next",
+      "score": 82.0,
+      "rel_strength_90d": 0.202,
+      "summary": ""
+    },
+    "shipbuilding": {
+      "name": "조선",
+      "stage": "next",
+      "score": 69.9,
+      "rel_strength_90d": 0.199,
+      "summary": ""
+    },
+    "defense": {
+      "name": "방산",
+      "stage": "next",
+      "score": 68.0,
+      "rel_strength_90d": 0.254,
+      "summary": ""
+    },
+    "nuclear": {
+      "name": "원전·SMR",
+      "stage": "future",
+      "score": 72.0,
+      "rel_strength_90d": 0.364,
+      "summary": ""
+    },
+    "robotics": {
+      "name": "휴머노이드·피지컬 AI (액추에이터·센서)",
+      "stage": "future",
+      "score": 75.0,
+      "rel_strength_90d": 0.537,
+      "summary": ""
+    },
+    "bio": {
+      "name": "바이오 (CDMO·플랫폼 기술수출)",
+      "stage": "future",
+      "score": 65.0,
+      "rel_strength_90d": 0.305,
+      "summary": ""
+    },
+    "value_up": {
+      "name": "밸류업·주주환원 (금융)",
+      "stage": "current",
+      "score": 65.0,
+      "rel_strength_90d": 0.241,
+      "summary": ""
+    }
+  },
+  "stocks": [
+    {
+      "code": "009540",
+      "name": "HD한국조선해양",
+      "theme": "shipbuilding",
+      "theme_name": "조선",
+      "price": 304500.0,
+      "per": 9.93831391363948,
+      "pbr": 1.6206894716392648,
+      "fair_value": 884833,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +158%",
+        "예상 EPS 61,278 = 최근 30,639 × (1+100%) (제한 적용)",
+        "× PER 18 (비중 70%)",
+        "BPS 187,883 × PBR 2 (비중 30%)"
+      ],
+      "entry_price": 840591,
+      "upside_pct": 1.906,
+      "scores": {
+        "macro": 49.0,
+        "theme": 69.9,
+        "issue": 50.0,
+        "valuation": 100
+      },
+      "total": 72.3,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [
+        "적정가의 34% 수준 — 가치 함정 또는 재무 데이터 오류 점검 필요"
+      ],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "042660",
+      "name": "한화오션",
+      "theme": "shipbuilding",
+      "theme_name": "조선",
+      "price": 75000.0,
+      "per": 18.445646827348746,
+      "pbr": 3.7243023140331712,
+      "fair_value": 114546,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +227%",
+        "예상 EPS 8,132 = 최근 4,066 × (1+100%) (제한 적용)",
+        "× PER 18 (비중 70%)",
+        "BPS 20,138 × PBR 2 (비중 30%)"
+      ],
+      "entry_price": 108819,
+      "upside_pct": 0.527,
+      "scores": {
+        "macro": 49.0,
+        "theme": 69.9,
+        "issue": 50.0,
+        "valuation": 100
+      },
+      "total": 72.3,
+      "verdict": "buy_candidate",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "012450",
+      "name": "한화에어로스페이스",
+      "theme": "defense",
+      "theme_name": "방산",
+      "price": 983000.0,
+      "per": 34.4031078290694,
+      "pbr": 5.221945984998194,
+      "fair_value": 1274691,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +243%",
+        "예상 EPS 57,146 = 최근 28,573 × (1+100%) (제한 적용)",
+        "× PER 25 (비중 80%)",
+        "BPS 188,244 × PBR 3.5 (비중 20%)"
+      ],
+      "entry_price": 1210956,
+      "upside_pct": 0.297,
+      "scores": {
+        "macro": 49.0,
+        "theme": 68.0,
+        "issue": 50.0,
+        "valuation": 94.5
+      },
+      "total": 69.9,
+      "verdict": "buy_candidate",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "267260",
+      "name": "HD현대일렉트릭",
+      "theme": "power_grid",
+      "theme_name": "전력기기 (변압기·전력망)",
+      "price": 640000.0,
+      "per": 31.48986419996064,
+      "pbr": 11.354362558989461,
+      "fair_value": 683045,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +40%",
+        "예상 EPS 28,480 = 최근 20,324 × (1+40%)",
+        "× PER 28 (비중 80%)",
+        "BPS 56,366 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 648893,
+      "upside_pct": 0.067,
+      "scores": {
+        "macro": 49.0,
+        "theme": 82.0,
+        "issue": 50.0,
+        "valuation": 60.1
+      },
+      "total": 61.4,
+      "verdict": "buy_candidate",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "000660",
+      "name": "SK하이닉스",
+      "theme": "ai_semiconductor",
+      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
+      "price": 1743000.0,
+      "per": 29.56492239843949,
+      "pbr": 10.148412527437976,
+      "fair_value": 1759734,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +789%",
+        "예상 EPS 117,910 = 최근 58,955 × (1+100%) (제한 적용)",
+        "× PER 18 (비중 80%)",
+        "BPS 171,751 × PBR 1.8 (비중 20%)"
+      ],
+      "entry_price": 1671747,
+      "upside_pct": 0.01,
+      "scores": {
+        "macro": 49.0,
+        "theme": 90.0,
+        "issue": 50.0,
+        "valuation": 51.4
+      },
+      "total": 60.3,
+      "verdict": "buy_candidate",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "207940",
+      "name": "삼성바이오로직스",
+      "theme": "bio",
+      "theme_name": "바이오 (CDMO·플랫폼 기술수출)",
+      "price": 1277000.0,
+      "per": 48.46299810246679,
+      "pbr": 7.9914390848331625,
+      "fair_value": 1347452,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +29%",
+        "예상 EPS 33,878 = 최근 26,350 × (1+29%)",
+        "× PER 45 (비중 80%)",
+        "BPS 159,796 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 1280079,
+      "upside_pct": 0.055,
+      "scores": {
+        "macro": 49.0,
+        "theme": 65.0,
+        "issue": 50.0,
+        "valuation": 58.3
+      },
+      "total": 56.5,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "005930",
+      "name": "삼성전자",
+      "theme": "ai_semiconductor",
+      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
+      "price": 271750.0,
+      "per": 41.400060938452164,
+      "pbr": 4.246292794974765,
+      "fair_value": 212082,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +791%",
+        "예상 EPS 13,128 = 최근 6,564 × (1+100%) (제한 적용)",
+        "× PER 18 (비중 80%)",
+        "BPS 63,997 × PBR 1.8 (비중 20%)"
+      ],
+      "entry_price": 201478,
+      "upside_pct": -0.22,
+      "scores": {
+        "macro": 49.0,
+        "theme": 90.0,
+        "issue": 50.0,
+        "valuation": 17.1
+      },
+      "total": 48.3,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "298040",
+      "name": "효성중공업",
+      "theme": "power_grid",
+      "theme_name": "전력기기 (변압기·전력망)",
+      "price": 2617000.0,
+      "per": 46.93749439512151,
+      "pbr": 10.362099344697194,
+      "fair_value": 1922420,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +38%",
+        "예상 EPS 76,803 = 최근 55,755 × (1+38%)",
+        "× PER 28 (비중 80%)",
+        "BPS 252,555 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 1826299,
+      "upside_pct": -0.265,
+      "scores": {
+        "macro": 49.0,
+        "theme": 82.0,
+        "issue": 50.0,
+        "valuation": 10.2
+      },
+      "total": 43.9,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "105560",
+      "name": "KB금융",
+      "theme": "value_up",
+      "theme_name": "밸류업·주주환원 (금융)",
+      "price": 168500.0,
+      "per": 11.147128870071448,
+      "pbr": 1.0232648525223327,
+      "fair_value": 134150,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +14%",
+        "예상 EPS 17,222 = 최근 15,116 × (1+14%)",
+        "× PER 8 (비중 40%)",
+        "BPS 164,669 × PBR 0.8 (비중 60%)"
+      ],
+      "entry_price": 127442,
+      "upside_pct": -0.204,
+      "scores": {
+        "macro": 49.0,
+        "theme": 65.0,
+        "issue": 50.0,
+        "valuation": 19.4
+      },
+      "total": 42.9,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "042700",
+      "name": "한미반도체",
+      "theme": "ai_semiconductor",
+      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
+      "price": 267000.0,
+      "per": 119.57008508732646,
+      "pbr": 36.685902720527615,
+      "fair_value": 36936,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +7%",
+        "예상 EPS 2,383 = 최근 2,233 × (1+7%)",
+        "× PER 18 (비중 80%)",
+        "BPS 7,278 × PBR 1.8 (비중 20%)"
+      ],
+      "entry_price": 35089,
+      "upside_pct": -0.862,
+      "scores": {
+        "macro": 49.0,
+        "theme": 90.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 42.4,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "010120",
+      "name": "LS ELECTRIC",
+      "theme": "power_grid",
+      "theme_name": "전력기기 (변압기·전력망)",
+      "price": 209000.0,
+      "per": 109.36682365253793,
+      "pbr": 15.014367816091953,
+      "fair_value": 85812,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +74%",
+        "예상 EPS 3,334 = 최근 1,911 × (1+74%)",
+        "× PER 28 (비중 80%)",
+        "BPS 13,920 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 81521,
+      "upside_pct": -0.589,
+      "scores": {
+        "macro": 49.0,
+        "theme": 82.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 40.4,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "277810",
+      "name": "레인보우로보틱스",
+      "theme": "robotics",
+      "theme_name": "휴머노이드·피지컬 AI (액추에이터·센서)",
+      "price": 451500.0,
+      "per": 6184.931506849315,
+      "pbr": 65.44426728511378,
+      "fair_value": 11199,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +0%",
+        "예상 EPS 73 = 최근 73 × (1+0%)",
+        "× PER 50 (비중 80%)",
+        "BPS 6,899 × PBR 6 (비중 20%)"
+      ],
+      "entry_price": 10639,
+      "upside_pct": -0.975,
+      "scores": {
+        "macro": 49.0,
+        "theme": 75.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 38.6,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "108490",
+      "name": "로보티즈",
+      "theme": "robotics",
+      "theme_name": "휴머노이드·피지컬 AI (액추에이터·센서)",
+      "price": 309000.0,
+      "per": 819.6286472148541,
+      "pbr": 14.235039388215784,
+      "fair_value": 41128,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +0%",
+        "예상 EPS 377 = 최근 377 × (1+0%)",
+        "× PER 50 (비중 80%)",
+        "BPS 21,707 × PBR 6 (비중 20%)"
+      ],
+      "entry_price": 39072,
+      "upside_pct": -0.867,
+      "scores": {
+        "macro": 49.0,
+        "theme": 75.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 38.6,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "034020",
+      "name": "두산에너빌리티",
+      "theme": "nuclear",
+      "theme_name": "원전·SMR",
+      "price": 80900.0,
+      "per": 612.8787878787879,
+      "pbr": 6.655149720302731,
+      "fair_value": 11218,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +62%",
+        "예상 EPS 214 = 최근 132 × (1+62%)",
+        "× PER 30 (비중 80%)",
+        "BPS 12,156 × PBR 2.5 (비중 20%)"
+      ],
+      "entry_price": 10657,
+      "upside_pct": -0.861,
+      "scores": {
+        "macro": 49.0,
+        "theme": 72.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 37.9,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "079550",
+      "name": "LIG넥스원",
+      "theme": "defense",
+      "theme_name": "방산",
+      "price": 669000.0,
+      "per": 58.09308787773532,
+      "pbr": 10.219201099824334,
+      "fair_value": 314010,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +16%",
+        "예상 EPS 13,409 = 최근 11,516 × (1+16%)",
+        "× PER 25 (비중 80%)",
+        "BPS 65,465 × PBR 3.5 (비중 20%)"
+      ],
+      "entry_price": 298310,
+      "upside_pct": -0.531,
+      "scores": {
+        "macro": 49.0,
+        "theme": 68.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 36.9,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "196170",
+      "name": "알테오젠",
+      "theme": "bio",
+      "theme_name": "바이오 (CDMO·플랫폼 기술수출)",
+      "price": 259250.0,
+      "per": 127.96150049358342,
+      "pbr": 40.81391687657431,
+      "fair_value": 150954,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "2026.06 분기 순이익 증가율 +108%",
+        "예상 EPS 4,052 = 최근 2,026 × (1+100%) (제한 적용)",
+        "× PER 45 (비중 80%)",
+        "BPS 6,352 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 143406,
+      "upside_pct": -0.418,
+      "scores": {
+        "macro": 49.0,
+        "theme": 65.0,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 36.1,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    }
+  ]
+}
