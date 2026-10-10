@@ -1,0 +1,15 @@
+# 모두 PyPI 공개 패키지 (오픈소스, 사용자 많은 검증된 라이브러리)
+pandas>=2.0
+numpy>=1.24
+PyYAML>=6.0              # 한국투자증권 공식 코드도 사용
+requests>=2.31           # 한국투자증권 공식 코드가 사용
+pycryptodome>=3.19       # 한국투자증권 공식 코드(웹소켓 복호화)가 사용
+websockets>=12.0         # 한국투자증권 공식 코드가 import 함
+python-dotenv>=1.0
+finance-datareader>=0.9  # 과거 주가·지수·환율·FRED 금리 (무료)
+opendartreader>=0.2      # 금감원 DART 공시 (무료 키). 파이썬 3.13+ 는 0.3, 3.12 이하는 0.2 가 설치됨
+feedparser>=6.0          # 뉴스 RSS
+anthropic>=0.40          # Claude API 공식 SDK
+boto3>=1.39              # AWS 공식 SDK — Amazon Nova 2 Lite(Bedrock) 호출, Bedrock API 키 인증은 1.39 이상
+matplotlib>=3.7          # 백테스트 그래프
+pytest>=8.0

@@ -1,0 +1,9 @@
+.env
+*.yaml.local
+kis_devlp.yaml
+state/
+reports/
+data/prices/
+__pycache__/
+.pytest_cache/
+.venv/

@@ -1,0 +1,94 @@
+# ============================================================
+# 테마 지도 (2026년 10월 초 기준 조사 → THEMES_2026Q4.md 참고)
+#
+# stage     : current(현재 주도) | next(차기 주도 후보) | future(중장기 성장)
+# base_score: 사람이 정한 테마 강도 0~100. 분석 agent 가 뉴스로 매주 보정합니다.
+# keywords  : 뉴스 검색어
+# valuation : 이 테마 종목의 '적정 배수'. 업종 특성에 맞게 직접 조정하세요.
+#             target_per 는 '내년 예상 이익' 기준 PER (2026-10-05 성장주 기준으로 상향)
+#             per_weight : 적정가에서 PER 이 차지하는 비중 (나머지는 PBR). 성장주 0.8, 금융 0.4
+#             PER 이 의미 없는(적자) 기업은 PBR 로만 평가하고 신뢰도를 낮춥니다.
+# candidates: 분석 대상 '예시' 종목입니다. 매수 추천이 아니며,
+#             분석 결과를 보고 approved.yaml 에서 직접 승인해야만 매매됩니다.
+# ============================================================
+
+themes:
+  ai_semiconductor:
+    name: 반도체·AI 인프라 (HBM, 메모리)
+    stage: current
+    base_score: 80
+    keywords: [HBM, 메모리 반도체, AI 데이터센터, 반도체 수출]
+    valuation: {target_per: 18, target_pbr: 1.8, per_weight: 0.8}   # 12→18
+    candidates:
+      - {code: "005930", name: 삼성전자}
+      - {code: "000660", name: SK하이닉스}
+      - {code: "042700", name: 한미반도체}
+
+  power_grid:
+    name: 전력기기 (변압기·전력망)
+    stage: next
+    base_score: 72
+    keywords: [변압기, 전력망, 데이터센터 전력, 전력기기 수주]
+    valuation: {target_per: 28, target_pbr: 4.0, per_weight: 0.8}   # 22→28
+    candidates:
+      - {code: "267260", name: HD현대일렉트릭}
+      - {code: "010120", name: LS ELECTRIC}
+      - {code: "298040", name: 효성중공업}
+
+  shipbuilding:
+    name: 조선
+    stage: next
+    base_score: 60
+    keywords: [조선 수주, 신조선가, LNG선, 미국 조선 협력]
+    valuation: {target_per: 18, target_pbr: 2.0, per_weight: 0.7}   # 15→18
+    candidates:
+      - {code: "009540", name: HD한국조선해양}
+      - {code: "042660", name: 한화오션}
+
+  defense:
+    name: 방산
+    stage: next
+    base_score: 58
+    keywords: [방산 수출, K방산, 국방 예산, 방산 수주]
+    valuation: {target_per: 25, target_pbr: 3.5, per_weight: 0.8}   # 20→25
+    candidates:
+      - {code: "012450", name: 한화에어로스페이스}
+      - {code: "079550", name: LIG넥스원}
+
+  nuclear:
+    name: 원전·SMR
+    stage: future
+    base_score: 62
+    keywords: [원전 수주, SMR, 체코 원전, 원자력]
+    valuation: {target_per: 30, target_pbr: 2.5, per_weight: 0.8}   # 25→30
+    candidates:
+      - {code: "034020", name: 두산에너빌리티}
+
+  robotics:
+    name: 휴머노이드·피지컬 AI (액추에이터·센서)
+    stage: future
+    base_score: 65
+    keywords: [휴머노이드, 액추에이터, 피지컬 AI, 로봇 양산]
+    valuation: {target_per: 50, target_pbr: 6.0, per_weight: 0.8}   # 40→50
+    candidates:
+      - {code: "277810", name: 레인보우로보틱스}
+      - {code: "108490", name: 로보티즈}
+
+  bio:
+    name: 바이오 (CDMO·플랫폼 기술수출)
+    stage: future
+    base_score: 55
+    keywords: [기술수출, CDMO, 임상 결과, 바이오시밀러]
+    valuation: {target_per: 45, target_pbr: 4.0, per_weight: 0.8}   # 35→45
+    candidates:
+      - {code: "207940", name: 삼성바이오로직스}
+      - {code: "196170", name: 알테오젠}
+
+  value_up:
+    name: 밸류업·주주환원 (금융)
+    stage: current
+    base_score: 55
+    keywords: [밸류업, 자사주 소각, 배당 확대, 주주환원]
+    valuation: {target_per: 8, target_pbr: 0.8, per_weight: 0.4}    # 금융은 PBR 위주
+    candidates:
+      - {code: "105560", name: KB금융}

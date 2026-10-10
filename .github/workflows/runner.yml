@@ -1,0 +1,193 @@
+name: 자동 실행기
+
+# GitHub 예약 실행은 몇 시간씩 늦게 시작하는 일이 잦아서(09:37 예약 → 18:25 실행),
+# 예약에 기대지 않고 '실행이 끝나기 전에 스스로 다음 실행을 시작'하는 방식으로 계속 이어 돌아갑니다.
+#   - 평일 08:00~20:00(KST): 보유 종목 가격 확인 2분마다 → 조건이면 텔레그램 알림
+#   - 평일 10:00~15:15: 그날 자동매매(DCA 자동매매 워크플로)를 한 번 시작 (이미 했으면 건너뜀)
+#   - 한 번 실행은 최대 5시간 30분, 끝나기 직전에 다음 실행을 시작
+#   - 끊겼을 때를 대비해 예비 예약이 3시간마다 다시 시작 (동시에 두 개는 돌지 않음)
+#   - 멈추려면: Settings → Secrets and variables → Actions → Variables 에 RUNNER_ENABLED = false
+# 공개 저장소의 GitHub Actions 는 무료이며 사용 시간 제한이 없습니다.
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "이번 실행 시간(분, 최대 330)"
+        default: "330"
+  schedule:
+    - cron: "23 */3 * * *"   # 예비: 이어달리기가 끊겼을 때 다시 시작
+
+permissions:
+  contents: write   # 장부 확인, 암호화된 알림 기록 저장
+  actions: write    # 다음 실행 시작, 자동매매 시작
+
+concurrency:
+  group: runner
+  cancel-in-progress: false
+
+jobs:
+  run:
+    # 비공개 저장소에서는 사용 시간(월 2,000분)을 금방 다 쓰므로 공개 저장소일 때만 돌아감
+    if: vars.RUNNER_ENABLED != 'false' && !github.event.repository.private
+    runs-on: ubuntu-latest
+    timeout-minutes: 345
+    env:
+      TZ: Asia/Seoul
+      GH_TOKEN: ${{ github.token }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      WATCH_CONFIG: ${{ secrets.WATCH_CONFIG }}          # 내 보유 종목·평단·알림 가격 (공개 저장소 파일에 두지 않음)
+      STATE_KEY: ${{ secrets.STATE_KEY || secrets.TELEGRAM_BOT_TOKEN }}   # 알림 기록 암호화 열쇠
+      HAS_KIS: ${{ secrets.KIS_PAPER_APP != '' }}
+      RUN_MINUTES: ${{ github.event.inputs.minutes || '330' }}
+      INTERVAL_SEC: "120"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치 (가격 확인에 필요한 것만)
+        run: pip install pandas pyyaml requests python-dotenv pycryptodome websockets finance-datareader
+
+      - name: 개인 설정 값은 기록(로그)에서 가리기
+        run: |
+          python - <<'PY'
+          import os, re
+          vals = set()
+          raw = os.environ.get("WATCH_CONFIG") or ""
+          # 먼저 글 속의 숫자·종목명 후보를 통째로 가림 (설정 형식이 틀려도 새지 않게)
+          for v in re.findall(r"[0-9][0-9,]{2,}", raw):
+              vals.add(v.rstrip(","))
+          try:
+              from src.watch import parse_watch_config
+              ws = parse_watch_config(raw) if raw.strip() else []
+          except Exception as e:                      # 어떤 경우에도 감시를 멈추지 않음
+              ws = []
+              print(f"::warning::알림 설정을 읽지 못했습니다 ({type(e).__name__})")
+          for w in ws:
+              vals.update(str(w.get(k)) for k in ("code", "name", "avg_price") if w.get(k) is not None)
+              for a in w.get("alerts") or []:
+                  vals.update(str(a.get(k)) for k in ("above", "below", "msg") if a.get(k) is not None)
+          for v in vals:
+              if len(v) >= 3:
+                  print(f"::add-mask::{v}")
+                  d = v.replace(",", "")
+                  if d.isdigit():
+                      print(f"::add-mask::{d}")
+                      print(f"::add-mask::{int(d):,}")   # 580,000 처럼 쉼표 넣은 표기도 가림
+          if raw.strip():
+              n = sum(len(w.get("alerts") or []) for w in ws)
+              print(f"::notice title=알림 설정::종목 {len(ws)}개 · 알림 {n}개 읽음" if ws else
+                    "::warning title=알림 설정::WATCH_CONFIG 를 읽지 못했습니다. 맨 윗줄이 watches: 인지, 띄어쓰기가 예시와 같은지 확인해 주세요")
+          else:
+              print("::warning title=알림 설정::WATCH_CONFIG Secret 이 비어 있습니다")
+          PY
+
+      - name: 알림 기록 불러오기 (암호화된 watch-state 브랜치)
+        run: |
+          mkdir -p state
+          if git ls-remote --exit-code --heads origin watch-state >/dev/null; then
+            git fetch -q --depth 1 origin watch-state
+            git worktree add -q --detach _ws FETCH_HEAD
+            if [ -f _ws/state.enc ]; then
+              openssl enc -d -aes-256-cbc -pbkdf2 -pass env:STATE_KEY -in _ws/state.enc | tar -xz -C state \
+                || echo "::warning::이전 알림 기록을 풀지 못했습니다(암호 열쇠가 바뀌었나요?). 새 기록으로 시작합니다."
+            fi
+          fi
+
+      - name: 한국투자증권 API 설정 (실시간 시세용)
+        if: env.HAS_KIS == 'true'
+        env:
+          KIS_PAPER_APP: ${{ secrets.KIS_PAPER_APP }}
+          KIS_PAPER_SEC: ${{ secrets.KIS_PAPER_SEC }}
+          KIS_PAPER_ACCOUNT: ${{ secrets.KIS_PAPER_ACCOUNT }}
+          KIS_HTS_ID: ${{ secrets.KIS_HTS_ID }}
+        run: |
+          git clone -q --depth 1 https://github.com/koreainvestment/open-trading-api "$RUNNER_TEMP/kis"
+          mkdir -p ~/KIS/config
+          python - <<'PY'
+          import os, yaml
+          src = os.path.join(os.environ["RUNNER_TEMP"], "kis", "kis_devlp.yaml")
+          cfg = yaml.safe_load(open(src, encoding="utf-8"))
+          cfg.update(paper_app=os.environ["KIS_PAPER_APP"], paper_sec=os.environ["KIS_PAPER_SEC"],
+                     my_paper_stock=os.environ["KIS_PAPER_ACCOUNT"], my_htsid=os.environ.get("KIS_HTS_ID", ""))
+          path = os.path.expanduser("~/KIS/config/kis_devlp.yaml")
+          yaml.safe_dump(cfg, open(path, "w", encoding="utf-8"), allow_unicode=True)
+          os.chmod(path, 0o600)
+          PY
+          echo "KIS_OPEN_API_PATH=$RUNNER_TEMP/kis/examples_user" >> "$GITHUB_ENV"
+
+      - name: 감시·자동매매 시작 (반복)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          save_state() {   # 알림을 보냈으면 바로, 아니면 30분마다 암호화해서 저장
+            [ -f state/watch_fired.json ] || return 0
+            sig=$(cat state/watch_fired.json state/watch_last.json 2>/dev/null | sha256sum | cut -c1-16)
+            fired_sig=$(sha256sum state/watch_fired.json | cut -c1-16)
+            if [ "$fired_sig" = "${LAST_FIRED_SIG:-}" ] && [ $((checks % 15)) != 1 ]; then return 0; fi
+            [ "$sig" = "${LAST_SIG:-}" ] && return 0
+            if [ ! -d _ws ]; then git worktree add -q --orphan -b watch-state _ws; fi
+            ( cd state && tar -cz watch_fired.json $( [ -f watch_last.json ] && echo watch_last.json ) ) \
+              | openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:STATE_KEY -out _ws/state.enc
+            printf "알림 기록(암호화). 자동 실행기만 읽을 수 있습니다.\n" > _ws/README.md
+            ( cd _ws && git checkout -q -B watch-state && git add -A && git commit -q -m "알림 기록 $(date '+%F %H:%M')" \
+              && git push -q -f origin watch-state ) || echo "::warning::알림 기록 저장 실패"
+            LAST_SIG=$sig; LAST_FIRED_SIG=$fired_sig
+          }
+
+          traded_today() {  # 오늘 자동매매를 이미 했거나 휴장일로 확인됐는지 (장부 브랜치 확인)
+            git fetch -q --depth 1 origin trading-data 2>/dev/null || return 1
+            local today; today=$(date +%F)
+            git show FETCH_HEAD:state/equity_history.csv 2>/dev/null | grep -q "^$today," && return 0
+            [ "$(git show FETCH_HEAD:state/holiday_checked.txt 2>/dev/null)" = "$today" ] && return 0
+            return 1
+          }
+
+          mins=$(( RUN_MINUTES > 330 ? 330 : RUN_MINUTES ))
+          deadline=$(( $(date +%s) + mins * 60 ))
+          checks=0; kicks=0; last_kick=0
+          echo "시작 $(date '+%F %a %H:%M') · 최대 ${mins}분"
+          while [ "$(date +%s)" -lt "$deadline" ]; do
+            dow=$(date +%u); hm=$(date +%H%M); now=$(date +%s)
+            weekday=$([ "$dow" -le 5 ] && echo 1 || echo 0)
+
+            if [ "$weekday" = 1 ] && [ "$hm" -ge 1000 ] && [ "$hm" -le 1515 ] && [ $((now - last_kick)) -gt 1800 ]; then
+              if traded_today; then last_kick=$now
+              else
+                gh workflow run dca.yml -f mode=scheduled && kicks=$((kicks + 1)) && echo "자동매매 시작 $(date +%H:%M)" \
+                  || echo "::warning::자동매매 시작 실패 $(date +%H:%M)"
+                last_kick=$now
+              fi
+            fi
+
+            if [ "$weekday" = 1 ] && [ "$hm" -ge 0800 ] && [ "$hm" -lt 2000 ]; then
+              if [ -n "$WATCH_CONFIG" ] || grep -qE '^[[:space:]]*-[[:space:]]*code:' config/watch.yaml; then
+                python main.py -v watch >> "$RUNNER_TEMP/watch.log" 2>&1 || echo "확인 오류 (다음 회차 재시도)" >> "$RUNNER_TEMP/watch.log"
+                checks=$((checks + 1)); save_state
+              fi
+              sleep "$INTERVAL_SEC"
+            else
+              left=$(( deadline - $(date +%s) )); sleep $(( left < 600 ? (left > 0 ? left : 1) : 600 ))
+            fi
+          done
+          echo "::notice title=이번 실행::${checks}회 가격 확인 · 자동매매 시작 ${kicks}회 · $(date '+%H:%M') 종료"
+          # 종목·가격은 공개 기록에 남기지 않고 횟수만 표시 (자세한 내용은 텔레그램으로 받음)
+          sent=$(grep -cE "알림 [0-9]+건 전송" "$RUNNER_TEMP/watch.log" 2>/dev/null || true)
+          warns=$(grep -cE "WARNING|오류|EGW" "$RUNNER_TEMP/watch.log" 2>/dev/null || true)
+          echo "::notice title=알림::텔레그램 알림 ${sent:-0}회 · 경고 ${warns:-0}건"
+
+      - name: 다음 실행 시작 (이어달리기)
+        if: ${{ !cancelled() && vars.RUNNER_ENABLED != 'false' && !github.event.repository.private }}
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          # 오류로 금방 끝났으면 10분 쉬었다가 이어감 (빠르게 무한 반복하지 않도록)
+          if [ "$JOB_STATUS" != "success" ]; then
+            echo "::warning::이번 실행에 오류가 있어 10분 뒤 다음 실행을 시작합니다"; sleep 600
+          fi
+          gh workflow run runner.yml -f minutes=330 && echo "다음 실행 예약됨"

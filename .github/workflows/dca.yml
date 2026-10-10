@@ -1,0 +1,178 @@
+name: DCA 자동매매
+
+# 자동 실행기가 평일 장중에 하루 1회 시작 + Actions 탭에서 수동 실행 버튼
+on:
+  # 예약 없음: '자동 실행기'(runner.yml)가 평일 10시에 scheduled 모드로 시작합니다.
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "실행 방식"
+        type: choice
+        default: daily
+        options:
+          - daily           # 평소: (주 1회 분석) → 실행 → 텔레그램
+          - scheduled       # 자동 실행기용: 장중 첫 실행 1회만 매매
+          - dry-run         # 주문 없이 미리보기만
+          - force-analysis  # 분석을 새로 한 뒤 실행
+          - notify-test     # 텔레그램 연결 확인
+          - check           # AI(Claude/Nova)·DART 연결 점검
+
+permissions:
+  contents: write   # trading-data 브랜치에 장부 저장
+
+concurrency:
+  group: dca-trading   # 두 번 겹쳐 돌지 않게
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TZ: Asia/Seoul
+      MODE: ${{ github.event.inputs.mode || 'daily' }}
+      # 키는 모두 저장소 Settings → Secrets and variables → Actions 에 등록 (코드에는 절대 넣지 않음)
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      # Amazon Nova 2 Lite (AWS Bedrock) — Claude 키가 없으면 자동 사용
+      AWS_BEARER_TOKEN_BEDROCK: ${{ secrets.AWS_BEARER_TOKEN_BEDROCK }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ vars.AWS_REGION || secrets.AWS_REGION || 'us-east-1' }}
+      NOVA_MODEL_ID: ${{ vars.NOVA_MODEL_ID }}
+      # Amazon Nova API (nova.amazon.com 개발자 키) — AWS_BEARER_TOKEN_BEDROCK 에 넣어도 자동 인식
+      NOVA_API_KEY: ${{ secrets.NOVA_API_KEY }}
+      NOVA_MODEL: ${{ vars.NOVA_MODEL }}
+      NOVA_BASE_URL: ${{ vars.NOVA_BASE_URL || secrets.NOVA_BASE_URL }}
+      NOVA_AUTH_HEADER: ${{ vars.NOVA_AUTH_HEADER }}
+      BEDROCK_ENDPOINT_URL: ${{ vars.BEDROCK_ENDPOINT_URL || secrets.BEDROCK_ENDPOINT_URL }}
+      LLM_PROVIDER: ${{ vars.LLM_PROVIDER }}
+      DART_API_KEY: ${{ secrets.DART_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      BROKER: ${{ vars.BROKER || 'paper' }}   # Variables 에서 kis_demo 로 바꿀 수 있음
+      LIVE_TRADING: "no"
+      # 한국투자 모의투자 키가 등록돼 있으면 PER·EPS·BPS(적정가 계산용)를 한국투자 API 에서 가져옴
+      HAS_KIS: ${{ secrets.KIS_PAPER_APP != '' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 실전 주문 차단 (안전장치)
+        run: |
+          if [ "$BROKER" = "kis_real" ]; then
+            echo "::error::GitHub 자동 실행에서는 실전 주문(kis_real)을 막아 두었습니다."
+            exit 1
+          fi
+
+      - name: 키 등록 확인 (값은 표시하지 않음)
+        env:
+          KIS_PAPER_APP: ${{ secrets.KIS_PAPER_APP }}
+          KIS_PAPER_SEC: ${{ secrets.KIS_PAPER_SEC }}
+          KIS_PAPER_ACCOUNT: ${{ secrets.KIS_PAPER_ACCOUNT }}
+          KIS_HTS_ID: ${{ secrets.KIS_HTS_ID }}
+        run: |
+          line=""
+          for k in TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID ANTHROPIC_API_KEY AWS_BEARER_TOKEN_BEDROCK AWS_ACCESS_KEY_ID NOVA_API_KEY NOVA_BASE_URL BEDROCK_ENDPOINT_URL DART_API_KEY KIS_PAPER_APP KIS_PAPER_SEC KIS_PAPER_ACCOUNT KIS_HTS_ID; do
+            if [ -n "${!k}" ]; then line="$line $k=✅"; else line="$line $k=❌"; fi
+          done
+          echo "::notice title=등록된 키::$line"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 패키지 설치
+        run: |
+          set -o pipefail
+          pip install -r requirements.txt 2>&1 | tee "$RUNNER_TEMP/pip.log" || {
+            echo "::error title=패키지 설치 실패::$(grep -iE 'error|requires|conflict' "$RUNNER_TEMP/pip.log" | tail -5 | tr '\n' ' ')"; exit 1; }
+
+      - name: 규칙 테스트
+        run: |
+          set -o pipefail
+          python -m pytest -q 2>&1 | tee "$RUNNER_TEMP/test.log" || {
+            echo "::error title=테스트 실패::$(tail -8 "$RUNNER_TEMP/test.log" | tr '\n' ' ')"; exit 1; }
+
+      - name: 이전 장부 불러오기 (trading-data 브랜치)
+        run: |
+          if git ls-remote --exit-code --heads origin trading-data >/dev/null; then
+            git fetch --depth 1 origin trading-data
+            git worktree add --detach _data FETCH_HEAD
+            for d in state reports data/prices; do
+              if [ -d "_data/$d" ]; then mkdir -p "$d" && cp -r "_data/$d/." "$d/"; fi
+            done
+            echo "이전 장부 불러옴"
+          else
+            echo "첫 실행 — 새 가상 계좌(시드 1,000만원)로 시작"
+          fi
+
+      - name: 한국투자증권 API 설정 (KIS 키가 등록돼 있을 때 — 시세·재무 조회, BROKER=kis_demo 면 주문도)
+        if: env.HAS_KIS == 'true'
+        env:
+          KIS_PAPER_APP: ${{ secrets.KIS_PAPER_APP }}
+          KIS_PAPER_SEC: ${{ secrets.KIS_PAPER_SEC }}
+          KIS_PAPER_ACCOUNT: ${{ secrets.KIS_PAPER_ACCOUNT }}
+          KIS_HTS_ID: ${{ secrets.KIS_HTS_ID }}
+        run: |
+          git clone --depth 1 https://github.com/koreainvestment/open-trading-api "$RUNNER_TEMP/kis"
+          mkdir -p ~/KIS/config
+          python - <<'PY'
+          import os, yaml
+          src = os.path.join(os.environ["RUNNER_TEMP"], "kis", "kis_devlp.yaml")
+          cfg = yaml.safe_load(open(src, encoding="utf-8"))
+          cfg.update(paper_app=os.environ["KIS_PAPER_APP"], paper_sec=os.environ["KIS_PAPER_SEC"],
+                     my_paper_stock=os.environ["KIS_PAPER_ACCOUNT"], my_htsid=os.environ.get("KIS_HTS_ID", ""))
+          path = os.path.expanduser("~/KIS/config/kis_devlp.yaml")
+          yaml.safe_dump(cfg, open(path, "w", encoding="utf-8"), allow_unicode=True)
+          os.chmod(path, 0o600)
+          PY
+          pip install pycryptodome websockets
+          echo "KIS_OPEN_API_PATH=$RUNNER_TEMP/kis/examples_user" >> "$GITHUB_ENV"
+
+      - name: 실행
+        run: |
+          set -o pipefail
+          case "$MODE" in
+            daily)
+              cmd="python main.py -v daily" ;;
+            scheduled)      cmd="python main.py -v daily --guard" ;;
+            dry-run)        cmd="python main.py -v daily --dry-run" ;;
+            force-analysis) cmd="python main.py -v daily --force-analysis" ;;
+            notify-test)    cmd="python main.py notify-test" ;;
+            check)          cmd="python main.py check" ;;
+            *) echo "알 수 없는 mode: $MODE"; exit 1 ;;
+          esac
+          $cmd 2>&1 | tee "$RUNNER_TEMP/run.log" || {
+            echo "::error title=실행 실패::$(tail -8 "$RUNNER_TEMP/run.log" | tr '\n' ' ')"; exit 1; }
+          # 연결 점검 결과와 데이터 수집 경고는 실패가 아니어도 화면에 표시
+          grep -E "^(AI|DART):" "$RUNNER_TEMP/run.log" | while read -r l; do echo "::notice title=연결 점검::$l"; done || true
+          grep -E "WARNING" "$RUNNER_TEMP/run.log" | sort -u | head -15 | while read -r l; do echo "::warning::$l"; done || true
+
+      - name: 결과 요약 (Actions 화면에 표시)
+        if: always()
+        run: |
+          f="reports/daily_$(date +%F).md"
+          if [ -f "$f" ]; then cat "$f" >> "$GITHUB_STEP_SUMMARY"; fi
+          a=$(ls -t reports/analysis_*.md 2>/dev/null | head -1)
+          if [ -n "$a" ]; then printf "\n\n---\n\n" >> "$GITHUB_STEP_SUMMARY"; cat "$a" >> "$GITHUB_STEP_SUMMARY"; fi
+
+      - name: 장부 저장 (trading-data 브랜치)
+        if: success() && env.MODE != 'dry-run' && env.MODE != 'notify-test' && env.MODE != 'check'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ ! -d _data ]; then
+            git worktree add --orphan -b trading-data _data
+          fi
+          cd _data
+          git checkout -B trading-data
+          for d in state reports data/prices; do
+            rm -rf "$d"; mkdir -p "$d"
+            if [ -d "../$d" ]; then cp -r "../$d/." "$d/"; fi
+          done
+          printf "# 자동매매 장부\n\nGitHub Actions 가 매일 갱신하는 가상 계좌(state/)와 보고서(reports/) 입니다. 코드는 main 브랜치에 있습니다.\n" > README.md
+          git add -A
+          if git diff --cached --quiet; then echo "변경 없음"; exit 0; fi
+          git commit -q -m "장부 $(date '+%F %H:%M') ($MODE)"
+          git push origin trading-data

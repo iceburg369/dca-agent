@@ -1,0 +1,73 @@
+# ============================================================
+# 장기 성장·가치주 DCA 전략 설정
+# 이 파일의 숫자만 바꿔도 전략이 바뀝니다. 바꾼 뒤에는 반드시
+#   python main.py backtest
+# 로 과거 성과를 먼저 확인하세요.
+# ============================================================
+
+account:
+  initial_cash: 10000000        # 가상 시드 1,000만원
+  max_positions: 5              # 동시에 보유할 최대 종목 수
+  per_stock_budget_pct: 0.18    # 종목당 최대 투자 한도 (시드 대비 18%)
+  min_cash_pct: 0.10            # 항상 남겨둘 최소 현금 비중 (10%)
+
+# ---------------- 매수 (DCA) ----------------
+buy:
+  # 적정가 대비 이 비율 이하로 내려와야 첫 매수 (0.95 = 적정가의 95%)
+  entry_ratio_to_fair: 0.95
+  # 첫 매수 이후, 마지막 매수가 대비 이만큼 더 떨어질 때마다 추가 매수
+  step_drop_pct: 0.08
+  # 종목당 최대 분할 매수 횟수 (예산을 이 횟수로 나눠 1회 금액 결정)
+  max_tranches: 5
+  # 같은 종목 추가 매수 사이 최소 간격 (거래일)
+  cooldown_days: 5
+  # 적정가 대비 이보다 더 싸면 '이상 신호'로 보고 매수 보류 + 사람 확인
+  #   (0.5 = 적정가의 절반 이하 → 가치 함정일 가능성 점검)
+  anomaly_ratio_to_fair: 0.50
+  # [선택] 정기 분할매수: 하락을 기다리기만 하면 오르는 성장주는 영영 못 사서 현금만 쌓입니다.
+  #   켜면, 적정가의 max_ratio_to_fair 이하일 때 interval_days 거래일마다 1회분씩 추가로 삽니다.
+  #   (하락 시 추가 매수 규칙은 그대로 함께 동작)
+  base_dca:
+    enabled: true
+    interval_days: 20           # 약 한 달
+    max_ratio_to_fair: 1.10     # 적정가보다 10% 비싼 수준까지는 정기 매수 허용
+  # 거시 상황이 risk_off 일 때 1회 매수 금액 배수 (0.5 = 절반만)
+  risk_off_size_mult: 0.5
+  # 거시 상황이 risk_on 일 때 1회 매수 금액 배수
+  risk_on_size_mult: 1.0
+
+# ---------------- 매도 (분할) ----------------
+sell:
+  # 평균 매수가 대비 수익률 구간별로 '처음 보유 수량'의 몇 %를 팔지
+  take_profit_ladder:
+    - {gain_pct: 0.30, sell_pct: 0.25}
+    - {gain_pct: 0.60, sell_pct: 0.25}
+    - {gain_pct: 1.00, sell_pct: 0.25}
+  # 남은 25%는 주가가 적정가의 이 배수 이상이 되면 매도 (고평가 구간)
+  overvalued_ratio_to_fair: 1.35
+  # 기업 논리(투자 아이디어)가 깨졌다고 분석되면: 자동 매도하지 않고 '알림'만
+  thesis_broken_action: alert   # alert | sell_all
+
+# ---------------- 비용 ----------------
+costs:
+  commission_pct: 0.00015       # 매수·매도 수수료 0.015% (증권사·이벤트마다 다름)
+  sell_tax_pct: 0.0020          # 매도 시 증권거래세+농특세. 세율은 연도별로 바뀌므로 확인 필요
+  slippage_pct: 0.001           # 체결 가격 미끄러짐 가정 0.1%
+
+# ---------------- 분석 가중치 ----------------
+analysis:
+  # 종합 점수 = 거시 + 테마 + 이슈 + 밸류에이션 (각 0~100점 → 가중 평균)
+  weights: {macro: 0.15, theme: 0.25, issue: 0.25, valuation: 0.35}
+  min_score_to_buy: 60          # 종합 점수가 이 이상이어야 매수 후보
+  # 이익 성장률 반영: 예상 EPS = 최근 EPS × (1 + 성장률). 호황·불황 정점 숫자를 그대로 믿지 않도록 제한
+  growth: {max_growth: 1.0, min_growth: -0.5}   # +100% ~ -50% 범위로만 반영
+  news_lookback_days: 14
+  disclosure_lookback_days: 60
+  llm_model: claude-sonnet-5    # Claude API 모델 이름 (.env 의 CLAUDE_MODEL 로 덮어쓸 수 있음)
+
+# ---------------- 실행 ----------------
+execution:
+  broker: paper                 # paper(내 PC 가상 장부) | kis_demo(한국투자 모의투자) | kis_real(실전)
+  order_type: limit             # 지정가 주문
+  require_approval: true        # 사람이 승인한 종목만 매매
+  analysis_interval_days: 7     # 분석 agent 는 주 1회, 실행 agent 는 매일 (장기 투자라 충분)
