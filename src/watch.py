@@ -34,10 +34,47 @@ def _num(v):
     return v
 
 
+_FIX = str.maketrans({"“": '"', "”": '"', "„": '"', "‘": "'", "’": "'", "\u00a0": " ", "\u3000": " ",
+                      "\ufeff": "", "\u200b": "", "\t": "  "})
+
+
+def _normalize(text: str) -> str:
+    """휴대폰·메신저 붙여넣기에서 바뀌는 문자(둥근 따옴표, 전각 기호, 특수 공백)를 원래대로."""
+    import unicodedata
+
+    out = []
+    for ch in (text or "").translate(_FIX):
+        if "\uff01" <= ch <= "\uff5e" and ch in "｛｝［］：，＂＇－　":
+            ch = unicodedata.normalize("NFKC", ch)
+        out.append(ch)
+    return "".join(out)
+
+
+def diagnose_watch_config(text: str) -> str:
+    """설정을 못 읽을 때 원인 힌트. 종목·가격 같은 값은 절대 넣지 않고 모양만 설명."""
+    raw = text or ""
+    t = _normalize(raw)
+    parts = [f"글자 {len(raw)}자·{raw.count(chr(10)) + 1}줄"]
+    if any(c in raw for c in "“”‘’"):
+        parts.append("둥근 따옴표 있음(자동 변환함)")
+    if "watches" not in t:
+        parts.append("'watches' 단어 없음")
+    if t.count("{") != t.count("}") or t.count("[") != t.count("]"):
+        parts.append(f"괄호 짝 안 맞음 {{ {t.count('{')}/{t.count('}')} }}, [ {t.count('[')}/{t.count(']')} ]")
+    try:
+        data = yaml.safe_load("\n".join(ln for ln in t.splitlines() if not ln.strip().startswith("```")))
+        parts.append(f"읽은 모양: {type(data).__name__}")
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        where = f" ({mark.line + 1}줄 {mark.column + 1}번째 글자 근처)" if mark else ""
+        parts.append(f"형식 오류: {getattr(e, 'problem', '') or '알 수 없음'}{where}")
+    return " · ".join(parts)
+
+
 def parse_watch_config(text: str) -> list[dict]:
     """알림 설정 글(YAML)을 읽어 종목 목록으로. 붙여넣기 실수(```yaml 표시, watches: 줄 빠짐,
     숫자 쉼표)는 너그럽게 받아 주고, 읽을 수 없으면 경고만 남기고 빈 목록."""
-    lines = [ln for ln in (text or "").splitlines() if not ln.strip().startswith("```")]
+    lines = [ln for ln in _normalize(text).splitlines() if not ln.strip().startswith("```")]
     try:
         data = yaml.safe_load("\n".join(lines))
     except yaml.YAMLError as e:

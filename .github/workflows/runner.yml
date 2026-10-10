@@ -80,8 +80,15 @@ jobs:
                       print(f"::add-mask::{int(d):,}")   # 580,000 처럼 쉼표 넣은 표기도 가림
           if raw.strip():
               n = sum(len(w.get("alerts") or []) for w in ws)
-              print(f"::notice title=알림 설정::종목 {len(ws)}개 · 알림 {n}개 읽음" if ws else
-                    "::warning title=알림 설정::WATCH_CONFIG 를 읽지 못했습니다. 맨 윗줄이 watches: 인지, 띄어쓰기가 예시와 같은지 확인해 주세요")
+              if ws:
+                  print(f"::notice title=알림 설정::종목 {len(ws)}개 · 알림 {n}개 읽음")
+              else:
+                  try:
+                      from src.watch import diagnose_watch_config
+                      hint = diagnose_watch_config(raw)        # 값은 빼고 모양만
+                  except Exception as e:
+                      hint = type(e).__name__
+                  print(f"::warning title=알림 설정::WATCH_CONFIG 를 읽지 못했습니다 — {hint}")
           else:
               print("::warning title=알림 설정::WATCH_CONFIG Secret 이 비어 있습니다")
           PY

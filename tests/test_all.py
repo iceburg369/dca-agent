@@ -784,3 +784,25 @@ def test_watch_config_tolerates_common_paste_mistakes(monkeypatch, tmp_path):
         assert [a.get("above", a.get("below")) for a in ws[0]["alerts"]] == [112000, 101000]
     monkeypatch.setenv("WATCH_CONFIG", "그냥 글자")                  # 엉뚱한 값이어도 멈추지 않음
     assert wt.load_watches() == []
+
+
+def test_watch_config_accepts_smart_quotes_and_fullwidth(monkeypatch):
+    """휴대폰 붙여넣기에서 생기는 둥근 따옴표(“ ”)·전각 문자·줄바꿈 없는 한 줄에도 동작."""
+    from src.watch import parse_watch_config
+
+    t = ('{watches: [{code: “900001”, name: “가상종목”, avg_price: 100000, alerts: '
+         '[{id: tp2, above: 112000, msg: “2차 익절 — 1/3 매도 검토”}, {id: sl, below: 101000, msg: ‘보호선’}]}]}')
+    ws = parse_watch_config(t)
+    assert len(ws) == 1 and ws[0]["code"] == "900001" and len(ws[0]["alerts"]) == 2
+    ws = parse_watch_config(t.replace("{", "｛").replace("}", "｝").replace(":", "："))
+    assert len(ws) == 1 and len(ws[0]["alerts"]) == 2
+    ws = parse_watch_config("﻿" + t.replace(" ", " "))           # 보이지 않는 특수 공백
+    assert len(ws) == 1
+
+
+def test_watch_config_diagnosis_reveals_no_values():
+    from src.watch import diagnose_watch_config
+
+    d = diagnose_watch_config('{watches: [{code: "900001", name: 가상종목, avg_price: 100000')
+    assert "900001" not in d and "가상종목" not in d and "100000" not in d
+    assert "글자" in d
