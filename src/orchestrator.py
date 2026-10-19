@@ -120,7 +120,11 @@ def run_daily(force_analysis: bool = False, use_llm: bool = True, dry_run: bool 
     else:
         log.info("최근 분석(%d일 전) 재사용 — 다시 하려면 --force-analysis", age)
 
+    auto = not cfg["execution"]["require_approval"]
     approved = {str(a["code"]).zfill(6) for a in load_approved()}
+    if auto:   # 자동 승인 모드: 매수 후보는 이미 매매 대상
+        approved |= {s["code"] for s in analysis["stocks"] if s.get("verdict") == "buy_candidate"}
+    auto_targets = [s for s in analysis["stocks"] if s.get("verdict") == "buy_candidate"] if auto else []
     new_candidates = [s for s in analysis["stocks"] if s.get("verdict") == "buy_candidate" and s["code"] not in approved]
     broken = [s for s in analysis["stocks"] if s["code"] in approved and not s.get("thesis_ok", True)]
 
@@ -140,6 +144,10 @@ def run_daily(force_analysis: bool = False, use_llm: bool = True, dry_run: bool 
          f"- 거시: {analysis['macro']['score']}점 / {analysis['macro']['regime']}",
          f"- 총 평가금액: {exe['equity']:,.0f}원 (시드 대비 {exe['equity'] / exe['initial_cash'] - 1:+.2%})",
          f"- 오늘 체결: {len(exe['executed'])}건", ""]
+    if auto_targets:
+        L += ["## 🤖 자동 매매 대상 (분석 매수 후보 · 가격 조건이 되면 분할매수)", ""]
+        L += [f"- {s['name']}({s['code']}) 점수 {s['total']}, 현재가 {s['price']:,.0f} / 적정가 {s['fair_value']:,}" for s in auto_targets]
+        L.append("")
     if new_candidates:
         L += ["## 🟢 승인 대기 중인 새 매수 후보", ""]
         L += [f"- {s['name']}({s['code']}) 점수 {s['total']}, 현재가 {s['price']:,.0f} / 적정가 {s['fair_value']:,} → `python main.py approve {s['code']}`" for s in new_candidates]
@@ -154,5 +162,6 @@ def run_daily(force_analysis: bool = False, use_llm: bool = True, dry_run: bool 
 
     from .notify import format_daily, send
 
-    send(format_daily(exe, analysis, new_candidates))
+    send(format_daily(exe, analysis, auto_targets or new_candidates,
+                      candidates_title="🤖 자동 매매 대상" if auto else "🟢 승인 대기 매수 후보"))
     return {"analysis": analysis, "execution": exe, "summary_path": str(path), "new_candidates": new_candidates}

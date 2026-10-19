@@ -17,7 +17,8 @@ log = logging.getLogger(__name__)
 MAX_LEN = 3800  # 텔레그램 한 메시지 최대 4096자 — 여유 있게 나눔
 
 
-def format_daily(exe: dict, analysis: dict | None = None, new_candidates: list | None = None) -> str:
+def format_daily(exe: dict, analysis: dict | None = None, new_candidates: list | None = None,
+                 candidates_title: str = "🟢 승인 대기 매수 후보") -> str:
     names = {s["code"]: s["name"] for s in (analysis or {}).get("stocks", [])}
     nm = lambda code, o=None: (o or {}).get("name") or names.get(code, code)
     ret = exe["equity"] / exe["initial_cash"] - 1 if exe.get("initial_cash") else 0
@@ -56,7 +57,7 @@ def format_daily(exe: dict, analysis: dict | None = None, new_candidates: list |
     if exe.get("alerts"):
         L += ["", "⚠️ 확인 필요"] + [f"- {a}" for a in exe["alerts"]]
     if new_candidates:
-        L += ["", "🟢 승인 대기 매수 후보"]
+        L += ["", candidates_title]
         L += [f"- {s['name']}({s['code']}) 점수 {s['total']} · 현재가 {s['price']:,.0f} / 적정가 {s['fair_value']:,}" for s in new_candidates]
     return "\n".join(L)
 

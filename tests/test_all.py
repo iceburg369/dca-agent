@@ -806,3 +806,31 @@ def test_watch_config_diagnosis_reveals_no_values():
     d = diagnose_watch_config('{watches: [{code: "900001", name: 가상종목, avg_price: 100000')
     assert "900001" not in d and "가상종목" not in d and "100000" not in d
     assert "글자" in d
+
+
+def test_auto_approval_buys_only_analysis_candidates(cfg, tmp_path, monkeypatch):
+    """require_approval: false 면 분석 agent 가 '매수 후보'로 판정한 종목만 사람 승인 없이 매매."""
+    import src.execution.agent as ea
+
+    for name, f in (("POS_FILE", "pos.json"), ("EQUITY_FILE", "eq.csv"), ("REALIZED_FILE", "r.csv")):
+        monkeypatch.setattr(ea, name, tmp_path / f)
+    monkeypatch.setattr(ea, "REPORT_DIR", tmp_path)
+    monkeypatch.setattr(ea, "load_approved", lambda: [])
+    cfg["execution"]["require_approval"] = False
+
+    class Q:
+        def get(self, code):
+            return {"price": 15_000}
+
+    stocks = [{"code": "900001", "name": "후보", "fair_value": 20_000, "thesis_ok": True, "verdict": "buy_candidate"},
+              {"code": "900002", "name": "관찰", "fair_value": 20_000, "thesis_ok": True, "verdict": "watch"}]
+    analysis = {"generated_at": "2026-10-05T10:00:00", "macro": {"regime": "neutral"}, "stocks": stocks}
+    broker = PaperBroker(cfg["costs"], 10_000_000, path=tmp_path / "acct.json")
+    r = ea.ExecutionAgent(broker=broker, quote_provider=Q(), cfg=cfg).run(analysis, today="2026-10-05")
+    bought = {o["code"] for o in r["executed"] if o["side"] == "buy"}
+    assert bought == {"900001"}                         # 점수 미달('관찰') 종목은 사지 않음
+
+    cfg["execution"]["require_approval"] = True          # 승인 모드면 승인 목록이 비었을 때 아무것도 안 삼
+    broker2 = PaperBroker(cfg["costs"], 10_000_000, path=tmp_path / "acct2.json")
+    r2 = ea.ExecutionAgent(broker=broker2, quote_provider=Q(), cfg=cfg).run(analysis, today="2026-10-05")
+    assert not [o for o in r2["executed"] if o["side"] == "buy"]

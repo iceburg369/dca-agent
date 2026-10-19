@@ -46,7 +46,10 @@ class ExecutionAgent:
         stale = age > MAX_ANALYSIS_AGE_DAYS
 
         by_code = {s["code"]: s for s in analysis["stocks"] if not s.get("error")}
-        approved = {str(a["code"]).zfill(6): a for a in load_approved()} if self.cfg["execution"]["require_approval"] else {c: {} for c in by_code}
+        approved = {str(a["code"]).zfill(6): a for a in load_approved()}
+        if not self.cfg["execution"]["require_approval"]:
+            # 자동 승인: 분석 agent 가 '매수 후보'(점수 기준 통과)로 판정한 종목만 추가. 종목 선택은 여전히 분석 agent 몫
+            approved.update({c: {} for c, s in by_code.items() if s.get("verdict") == "buy_candidate" and c not in approved})
         holdings = self.broker.holdings()
         targets = sorted(set(approved) | set(holdings))
 

@@ -151,6 +151,8 @@ watches:
 ```
 
 ### 승인은 어떻게? (GitHub 에서)
+지금은 **자동 승인 모드**입니다 (`config/strategy.yaml` → `require_approval: false`). 분석에서 점수 60점 이상 '매수 후보'가 된 종목은 승인 없이 가격 조건이 되면 분할매수합니다. 다시 직접 승인 방식으로 돌리려면 `true` 로 바꾸세요.
+
 저장소에서 `config/approved.yaml` 을 열고 연필(✏️) 버튼 → 종목 추가 → **Commit changes**. 다음 실행부터 반영됩니다.
 ```yaml
 approved:

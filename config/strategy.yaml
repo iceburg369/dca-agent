@@ -69,5 +69,5 @@ analysis:
 execution:
   broker: paper                 # paper(내 PC 가상 장부) | kis_demo(한국투자 모의투자) | kis_real(실전)
   order_type: limit             # 지정가 주문
-  require_approval: true        # 사람이 승인한 종목만 매매
+  require_approval: false       # false: 분석 '매수 후보'(점수 60↑)를 승인 없이 매매 / true: approved.yaml 에 승인한 종목만
   analysis_interval_days: 7     # 분석 agent 는 주 1회, 실행 agent 는 매일 (장기 투자라 충분)
