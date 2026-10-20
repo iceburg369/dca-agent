@@ -1,1 +1,26 @@
-{}
+{
+  "000660": {
+    "tranches": 0,
+    "last_buy_price": null,
+    "last_buy_date": null,
+    "peak_qty": 0,
+    "sold_levels": [],
+    "invested": 0.0
+  },
+  "012450": {
+    "tranches": 0,
+    "last_buy_price": null,
+    "last_buy_date": null,
+    "peak_qty": 0,
+    "sold_levels": [],
+    "invested": 0.0
+  },
+  "267260": {
+    "tranches": 0,
+    "last_buy_price": null,
+    "last_buy_date": null,
+    "peak_qty": 0,
+    "sold_levels": [],
+    "invested": 0.0
+  }
+}
