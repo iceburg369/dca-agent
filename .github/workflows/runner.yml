@@ -134,12 +134,12 @@ jobs:
 
           save_state() {   # 알림을 보냈으면 바로, 아니면 30분마다 암호화해서 저장
             [ -f state/watch_fired.json ] || return 0
-            sig=$(cat state/watch_fired.json state/watch_last.json 2>/dev/null | sha256sum | cut -c1-16)
+            sig=$(cat state/watch_fired.json state/watch_last.json state/watch_report.txt 2>/dev/null | sha256sum | cut -c1-16)
             fired_sig=$(sha256sum state/watch_fired.json | cut -c1-16)
             if [ "$fired_sig" = "${LAST_FIRED_SIG:-}" ] && [ $((checks % 15)) != 1 ]; then return 0; fi
             [ "$sig" = "${LAST_SIG:-}" ] && return 0
             if [ ! -d _ws ]; then git worktree add -q --orphan -b watch-state _ws; fi
-            ( cd state && tar -cz watch_fired.json $( [ -f watch_last.json ] && echo watch_last.json ) ) \
+            ( cd state && tar -cz watch_fired.json $(for f in watch_last.json watch_report.txt; do [ -f "$f" ] && echo "$f"; done) ) \
               | openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:STATE_KEY -out _ws/state.enc
             printf "알림 기록(암호화). 자동 실행기만 읽을 수 있습니다.\n" > _ws/README.md
             ( cd _ws && git checkout -q -B watch-state && git add -A && git commit -q -m "알림 기록 $(date '+%F %H:%M')" \
@@ -157,7 +157,7 @@ jobs:
 
           mins=$(( RUN_MINUTES > 330 ? 330 : RUN_MINUTES ))
           deadline=$(( $(date +%s) + mins * 60 ))
-          checks=0; kicks=0; last_kick=0
+          checks=0; kicks=0; last_kick=0; reports=0
           echo "시작 $(date '+%F %a %H:%M') · 최대 ${mins}분"
           while [ "$(date +%s)" -lt "$deadline" ]; do
             dow=$(date +%u); hm=$(date +%H%M); now=$(date +%s)
@@ -176,13 +176,21 @@ jobs:
               if [ -n "$WATCH_CONFIG" ] || grep -qE '^[[:space:]]*-[[:space:]]*code:' config/watch.yaml; then
                 python main.py -v watch >> "$RUNNER_TEMP/watch.log" 2>&1 || echo "확인 오류 (다음 회차 재시도)" >> "$RUNNER_TEMP/watch.log"
                 checks=$((checks + 1)); save_state
+                # 장 마감 후(15:40~) 하루 한 번: 보유 종목 리포트 (수익률·추가 매수가·분할 매도가)
+                if [ "$hm" -ge 1540 ] && [ "$(cat state/watch_report.txt 2>/dev/null)" != "$(date +%F)" ]; then
+                  git fetch -q --depth 1 origin trading-data 2>/dev/null \
+                    && git show FETCH_HEAD:state/analysis_latest.json > state/analysis_latest.json 2>/dev/null || true
+                  if python main.py watch --report >> "$RUNNER_TEMP/watch.log" 2>&1; then
+                    date +%F > state/watch_report.txt; reports=$((reports + 1)); LAST_FIRED_SIG=""; save_state
+                  fi
+                fi
               fi
               sleep "$INTERVAL_SEC"
             else
               left=$(( deadline - $(date +%s) )); sleep $(( left < 600 ? (left > 0 ? left : 1) : 600 ))
             fi
           done
-          echo "::notice title=이번 실행::${checks}회 가격 확인 · 자동매매 시작 ${kicks}회 · $(date '+%H:%M') 종료"
+          echo "::notice title=이번 실행::${checks}회 가격 확인 · 자동매매 시작 ${kicks}회 · 보유 종목 리포트 ${reports}회 · $(date '+%H:%M') 종료"
           # 종목·가격은 공개 기록에 남기지 않고 횟수만 표시 (자세한 내용은 텔레그램으로 받음)
           sent=$(grep -cE "알림 [0-9]+건 전송" "$RUNNER_TEMP/watch.log" 2>/dev/null || true)
           warns=$(grep -cE "WARNING|오류|EGW" "$RUNNER_TEMP/watch.log" 2>/dev/null || true)

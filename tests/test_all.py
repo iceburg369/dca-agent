@@ -834,3 +834,37 @@ def test_auto_approval_buys_only_analysis_candidates(cfg, tmp_path, monkeypatch)
     broker2 = PaperBroker(cfg["costs"], 10_000_000, path=tmp_path / "acct2.json")
     r2 = ea.ExecutionAgent(broker=broker2, quote_provider=Q(), cfg=cfg).run(analysis, today="2026-10-05")
     assert not [o for o in r2["executed"] if o["side"] == "buy"]
+
+
+# ---------------------------------------------------------------- 내 보유 종목: 자동 기준가 + 매일 리포트
+MY = {"code": "900003", "name": "가상전자", "avg_price": 200_000, "qty": 4}
+
+
+def test_watch_auto_levels_when_no_alerts(cfg):
+    """alerts 를 안 적으면 전략 숫자(−8% 추가 매수, +30/60/100% 분할 매도)로 기준가를 자동 생성."""
+    from src.watch import plan_levels, with_auto_alerts
+
+    p = plan_levels(MY, cfg)
+    assert [round(x) for x in p["buy"][:2]] == [184_000, 169_280]
+    assert [round(x["price"]) for x in p["sell"]] == [260_000, 320_000, 400_000]
+    assert [x["qty"] for x in p["sell"]] == [1, 1, 1]
+    w = with_auto_alerts(MY, cfg)
+    ids = {a["id"]: a for a in w["alerts"]}
+    assert ids["buy1"]["below"] == 184_000 and ids["tp30"]["above"] == 260_000
+    custom = with_auto_alerts({**MY, "alerts": [{"id": "x", "above": 1}]}, cfg)
+    assert [a["id"] for a in custom["alerts"]] == ["x"]           # 직접 적은 알림은 그대로
+
+
+def test_daily_holdings_report(cfg):
+    from src.watch import holdings_report
+
+    msg = holdings_report([MY], lambda c: (190_000, "KRX"), cfg, fair_values={"900003": 250_000},
+                          now=__import__("datetime").datetime(2026, 10, 20, 15, 40))
+    assert "가상전자" in msg and "190,000" in msg and "-5.0%" in msg
+    assert "184,000" in msg and "260,000" in msg                  # 다음 추가 매수가·1차 매도가
+    assert "적정가 250,000" in msg and "76%" in msg
+    assert "주문은 하지 않" in msg
+    msg2 = holdings_report([MY], lambda c: (183_000, "KRX"), cfg, now=__import__("datetime").datetime(2026, 10, 20))
+    assert "추가 매수 구간" in msg2
+    msg3 = holdings_report([MY], lambda c: (265_000, "KRX"), cfg, now=__import__("datetime").datetime(2026, 10, 20))
+    assert "분할 매도 구간" in msg3

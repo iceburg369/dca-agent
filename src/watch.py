@@ -159,7 +159,11 @@ def run(get_price, send, now: dt.datetime | None = None) -> list[str]:
     fired_all = _load_fired()
     last = json.loads(LAST_FILE.read_text(encoding="utf-8")) if LAST_FILE.exists() else {}
     sent = []
+    from .config import load_strategy
+
+    cfg = load_strategy()
     for w in load_watches():
+        w = with_auto_alerts(w, cfg)
         code = str(w["code"]).zfill(6)
         if w.get("reset"):
             fired_all.pop(code, None)
@@ -181,3 +185,84 @@ def run(get_price, send, now: dt.datetime | None = None) -> list[str]:
     FIRED_FILE.write_text(json.dumps(fired_all, ensure_ascii=False, indent=2), encoding="utf-8")
     LAST_FILE.write_text(json.dumps(last, ensure_ascii=False, indent=2), encoding="utf-8")
     return sent
+
+
+# ---------------------------------------------------------------- 내 보유 종목: 자동 기준가 + 매일 리포트
+def plan_levels(w: dict, cfg: dict) -> dict:
+    """평단 기준 추가 매수가(−8%씩)와 분할 매도가(+30/60/100%). 자동매매와 같은 전략 숫자(strategy.yaml) 사용.
+    ※ 예측이 아니라 '규칙상 기준가' 입니다."""
+    avg = float(w.get("avg_price") or 0)
+    if avg <= 0:
+        return {"buy": [], "sell": []}
+    b, sl = cfg["buy"], cfg["sell"]
+    step = b["step_drop_pct"]
+    buys = [avg * (1 - step) ** k for k in range(1, max(int(b.get("max_tranches", 5)) - 1, 1) + 1)]
+    qty = int(w.get("qty") or 0)
+    sells = []
+    for lv in sl["take_profit_ladder"]:
+        q = max(1, round(qty * lv["sell_pct"])) if qty else None
+        sells.append({"price": avg * (1 + lv["gain_pct"]), "gain": lv["gain_pct"], "qty": q})
+    return {"buy": buys, "sell": sells}
+
+
+def with_auto_alerts(w: dict, cfg: dict) -> dict:
+    """alerts 를 비워 두면 기준가로 알림을 자동 생성 (추가 매수 2단계 + 분할 매도 3단계)."""
+    if w.get("alerts"):
+        return w
+    p = plan_levels(w, cfg)
+    alerts = [{"id": f"buy{i}", "below": round(x), "msg": f"추가 매수 {i}차 기준가 (평단 대비 {x / w['avg_price'] - 1:+.0%})"}
+              for i, x in enumerate(p["buy"][:2], 1)]
+    for x in p["sell"]:
+        q = f" {x['qty']}주" if x["qty"] else " 보유분 1/4"
+        alerts.append({"id": f"tp{round(x['gain'] * 100)}", "above": round(x["price"]),
+                       "msg": f"분할 매도 기준가 (+{x['gain']:.0%}) —{q} 매도 검토"})
+    return {**w, "alerts": alerts}
+
+
+def holdings_report(watches: list[dict], get_price, cfg: dict, fair_values: dict | None = None,
+                    now: dt.datetime | None = None) -> str:
+    """매일 장 마감 후 보내는 '내 보유 종목' 리포트: 수익률, 다음 추가 매수가, 분할 매도가, 적정가 대비 위치."""
+    now = now or dt.datetime.now()
+    fair_values = fair_values or {}
+    L = [f"📊 내 보유 종목 리포트 {now:%m/%d}"]
+    for w in watches:
+        code = str(w["code"]).zfill(6)
+        try:
+            price, market = get_price(code)
+        except Exception as e:
+            L += ["", f"{w.get('name', code)}: 현재가 조회 실패 ({str(e)[:40]})"]
+            continue
+        avg, qty = float(w.get("avg_price") or 0), int(w.get("qty") or 0)
+        p = plan_levels(w, cfg)
+        L += ["", f"▶ {w.get('name', code)}({code})" + (f" {qty}주" if qty else "") + (f" · 평단 {avg:,.0f}" if avg else "")]
+        line = f"현재가 {price:,.0f}원 ({market})"
+        if avg:
+            line += f" · {price / avg - 1:+.1%}"
+            if qty:
+                line += f" · 평가손익 {(price - avg) * qty:+,.0f}원"
+        L.append(line)
+        if p["buy"]:
+            nxt = [x for x in p["buy"] if x < price]
+            L.append("⬇️ 추가 매수 기준가: " + ", ".join(f"{x:,.0f}({x / avg - 1:+.0%})" for x in p["buy"][:3])
+                     + (f" — 다음 기준가까지 {nxt[0] / price - 1:+.1%}" if nxt else ""))
+        if p["sell"]:
+            L.append("⬆️ 분할 매도 기준가: " + ", ".join(
+                f"{x['price']:,.0f}(+{x['gain']:.0%}{', ' + str(x['qty']) + '주' if x['qty'] else ''})" for x in p["sell"]))
+        fair = fair_values.get(code)
+        if fair:
+            L.append(f"📐 분석 적정가 {fair:,.0f}원 · 현재가는 적정가의 {price / fair:.0%}")
+        # 오늘의 판단 (규칙 기반)
+        if p["sell"] and price >= p["sell"][0]["price"]:
+            done = [x for x in p["sell"] if price >= x["price"]]
+            view = f"🔴 분할 매도 구간 — +{done[-1]['gain']:.0%} 기준가 도달, 매도 검토"
+        elif p["buy"] and price <= p["buy"][0]:
+            view = "🔵 추가 매수 구간 — 기준가 아래, 분할 추가 매수 검토"
+        elif fair and price >= fair * cfg["sell"]["overvalued_ratio_to_fair"]:
+            view = "🟠 적정가 대비 고평가 — 일부 매도 검토"
+        elif fair and price <= fair * cfg["buy"]["entry_ratio_to_fair"]:
+            view = "🟢 적정가보다 낮음 — 보유 유지, 기준가 오면 추가 매수"
+        else:
+            view = "⚪ 보유 유지 — 기준가 도달 전까지 대기"
+        L.append("판단: " + view)
+    L += ["", "※ 예측이 아니라 자동매매와 같은 규칙으로 계산한 기준가입니다. 주문은 하지 않았습니다."]
+    return "\n".join(L)

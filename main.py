@@ -176,6 +176,25 @@ def cmd_watch(a):
             ok = send(watch.format_alert({**w, "code": code}, price, sample, "테스트", market), silent=False)
             print(("전송 성공: " if ok else "전송 실패: ") + f"{w['name']} 현재가 {price:,.0f} ({market})")
         return
+    if a.report:  # 매일 장 마감 후: 보유 종목 수익률·추가 매수가·분할 매도가 리포트
+        import json
+
+        from src.config import STATE_DIR, load_strategy
+
+        fair = {}
+        f = STATE_DIR / "analysis_latest.json"
+        if f.exists():
+            try:
+                fair = {s["code"]: s["fair_value"] for s in json.loads(f.read_text(encoding="utf-8")).get("stocks", [])
+                        if s.get("fair_value")}
+            except Exception as e:
+                print(f"분석 결과를 읽지 못함: {str(e)[:60]}")
+        ws = watch.load_watches()
+        if not ws:
+            print("보유 종목 설정 없음"); return
+        ok = send(watch.holdings_report(ws, get_price, load_strategy(), fair))
+        print("리포트 전송 성공" if ok else "리포트 전송 실패")   # 내용은 기록에 남기지 않음 (텔레그램으로만)
+        return
     sent = watch.run(get_price, send)
     print(f"알림 {len(sent)}건 전송" if sent else "조건에 맞는 알림 없음")
     for m in sent:
@@ -285,7 +304,8 @@ def main():
     s = sub.add_parser("status"); s.set_defaults(f=cmd_status)
     s = sub.add_parser("notify-test"); s.set_defaults(f=cmd_notify_test)
     s = sub.add_parser("check"); s.set_defaults(f=cmd_check)
-    s = sub.add_parser("watch"); s.add_argument("--test", action="store_true", help="알림음 확인용 예시 알림 보내기"); s.set_defaults(f=cmd_watch)
+    s = sub.add_parser("watch"); s.add_argument("--test", action="store_true", help="알림음 확인용 예시 알림 보내기")
+    s.add_argument("--report", action="store_true", help="보유 종목 매일 리포트 보내기"); s.set_defaults(f=cmd_watch)
 
     a = p.parse_args()
     logging.basicConfig(level=logging.INFO if a.verbose else logging.WARNING, format="%(levelname)s %(message)s")
