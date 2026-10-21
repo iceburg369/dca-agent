@@ -848,6 +848,7 @@ def test_watch_auto_levels_when_no_alerts(cfg):
     assert [round(x) for x in p["buy"][:2]] == [184_000, 169_280]
     assert [round(x["price"]) for x in p["sell"]] == [260_000, 320_000, 400_000]
     assert [x["qty"] for x in p["sell"]] == [1, 1, 1]
+    assert [x["qty"] for x in plan_levels({**MY, "qty": 10}, cfg)["sell"]] == [3, 3, 3]   # 남은 1주는 계속 보유
     w = with_auto_alerts(MY, cfg)
     ids = {a["id"]: a for a in w["alerts"]}
     assert ids["buy1"]["below"] == 184_000 and ids["tp30"]["above"] == 260_000

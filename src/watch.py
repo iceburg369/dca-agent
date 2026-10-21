@@ -12,6 +12,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import logging
+import math
 
 import yaml
 
@@ -200,7 +201,7 @@ def plan_levels(w: dict, cfg: dict) -> dict:
     qty = int(w.get("qty") or 0)
     sells = []
     for lv in sl["take_profit_ladder"]:
-        q = max(1, round(qty * lv["sell_pct"])) if qty else None
+        q = max(1, math.ceil(qty * lv["sell_pct"] - 1e-9)) if qty else None   # 10주 × 25% → 3주 (올림)
         sells.append({"price": avg * (1 + lv["gain_pct"]), "gain": lv["gain_pct"], "qty": q})
     return {"buy": buys, "sell": sells}
 
