@@ -105,14 +105,22 @@ def decide(cfg: dict, ctx: dict, stock: dict, holding: dict | None, pstate: dict
     budget = ctx["equity"] * a["per_stock_budget_pct"]
     mult = {"risk_off": b["risk_off_size_mult"], "risk_on": b["risk_on_size_mult"]}.get(ctx.get("regime"), 1.0)
     amount = budget / b["max_tranches"] * mult
-    amount = min(amount, budget - pstate.get("invested", 0.0))
+    room = budget - pstate.get("invested", 0.0)          # 이 종목에 더 넣을 수 있는 금액
+    amount = min(amount, room)
     spendable = ctx["cash"] - ctx["equity"] * a["min_cash_pct"]
     amount = min(amount, spendable)
     qty = int(amount // price)
     if qty <= 0:
-        if spendable < price:
+        # 1주 가격이 1회분 금액보다 비싼 대형주(하이닉스 등): 종목당 한도·현금 안이면 1주만 산다
+        if 0 < price <= room and price <= spendable:
+            qty = 1
+            reason += f" (1회분 {amount:,.0f}원 < 1주 가격 → 1주)"
+        elif spendable < price:
             alerts.append(f"⚪ {tag}: 매수 신호지만 최소 현금 비중 유지로 보류")
-        return orders, alerts
+            return orders, alerts
+        else:
+            alerts.append(f"⚪ {tag}: 매수 신호지만 1주 가격 {price:,.0f}원이 종목당 남은 한도 {max(room, 0):,.0f}원보다 커서 보류")
+            return orders, alerts
     if mult != 1.0:
         reason += f" (거시 {ctx.get('regime')} → 금액 ×{mult})"
     orders.append({"side": "buy", "code": code, "qty": qty, "price": price, "reason": reason})

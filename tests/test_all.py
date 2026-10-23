@@ -869,3 +869,17 @@ def test_daily_holdings_report(cfg):
     assert "추가 매수 구간" in msg2
     msg3 = holdings_report([MY], lambda c: (265_000, "KRX"), cfg, now=__import__("datetime").datetime(2026, 10, 20))
     assert "분할 매도 구간" in msg3
+
+
+def test_expensive_share_buys_one_instead_of_silently_skipping(cfg):
+    """1회분 금액(예: 18만원)보다 1주 가격이 비싸도, 종목당 한도 안이면 1주는 산다. 한도를 넘으면 이유를 알린다."""
+    from src.execution import rules
+
+    ctx = {"date": "2026-10-23", "cash": 10_000_000, "equity": 10_000_000, "regime": "risk_off"}
+    stock = {"code": "900004", "name": "비싼주", "price": 1_295_000, "fair_value": 1_760_000, "thesis_ok": True, "approved": True}
+    orders, alerts = rules.decide(cfg, ctx, stock, None, rules.new_pstate(), 0)
+    assert len(orders) == 1 and orders[0]["qty"] == 1 and "1주" in orders[0]["reason"]
+
+    too_big = {**stock, "price": 2_500_000, "fair_value": 3_000_000}      # 종목당 한도(180만) 초과
+    orders, alerts = rules.decide(cfg, ctx, too_big, None, rules.new_pstate(), 0)
+    assert orders == [] and any("한도" in a for a in alerts)
