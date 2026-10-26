@@ -1,26 +1,26 @@
 {
   "000660": {
-    "tranches": 0,
-    "last_buy_price": null,
-    "last_buy_date": null,
-    "peak_qty": 0,
+    "tranches": 1,
+    "last_buy_price": 1293291.9999999998,
+    "last_buy_date": "2026-10-26",
+    "peak_qty": 1,
     "sold_levels": [],
-    "invested": 0.0
+    "invested": 1293291.9999999998
   },
   "012450": {
-    "tranches": 0,
-    "last_buy_price": null,
-    "last_buy_date": null,
-    "peak_qty": 0,
+    "tranches": 1,
+    "last_buy_price": 760759.9999999999,
+    "last_buy_date": "2026-10-26",
+    "peak_qty": 1,
     "sold_levels": [],
-    "invested": 0.0
+    "invested": 760759.9999999999
   },
   "267260": {
-    "tranches": 0,
-    "last_buy_price": null,
-    "last_buy_date": null,
-    "peak_qty": 0,
+    "tranches": 1,
+    "last_buy_price": 452451.99999999994,
+    "last_buy_date": "2026-10-26",
+    "peak_qty": 1,
     "sold_levels": [],
-    "invested": 0.0
+    "invested": 452451.99999999994
   }
 }
