@@ -8,8 +8,8 @@
 #             target_per 는 '내년 예상 이익' 기준 PER (2026-10-05 성장주 기준으로 상향)
 #             per_weight : 적정가에서 PER 이 차지하는 비중 (나머지는 PBR). 성장주 0.8, 금융 0.4
 #             PER 이 의미 없는(적자) 기업은 PBR 로만 평가하고 신뢰도를 낮춥니다.
-# candidates: 분석 대상 '예시' 종목입니다. 매수 추천이 아니며,
-#             분석 결과를 보고 approved.yaml 에서 직접 승인해야만 매매됩니다.
+# candidates: 분석 대상 종목 (2026-10-31 16→30종목). 매수 추천이 아니며, 분석 점수가 기준(60점)을 넘고
+#             적정가보다 쌀 때만 자동 매매 대상이 됩니다 (strategy.yaml require_approval: false).
 # ============================================================
 
 themes:
@@ -23,6 +23,7 @@ themes:
       - {code: "005930", name: 삼성전자}
       - {code: "000660", name: SK하이닉스}
       - {code: "042700", name: 한미반도체}
+      - {code: "009150", name: 삼성전기}          # 2026-10-31 추가 (AI 서버용 MLCC·기판)
 
   power_grid:
     name: 전력기기 (변압기·전력망)
@@ -44,6 +45,8 @@ themes:
     candidates:
       - {code: "009540", name: HD한국조선해양}
       - {code: "042660", name: 한화오션}
+      - {code: "329180", name: HD현대중공업}      # 2026-10-31 추가
+      - {code: "010140", name: 삼성중공업}        # 2026-10-31 추가
 
   defense:
     name: 방산
@@ -54,6 +57,7 @@ themes:
     candidates:
       - {code: "012450", name: 한화에어로스페이스}
       - {code: "079550", name: LIG넥스원}
+      - {code: "064350", name: 현대로템}          # 2026-10-31 추가 (K2 전차)
 
   nuclear:
     name: 원전·SMR
@@ -63,6 +67,7 @@ themes:
     valuation: {target_per: 30, target_pbr: 2.5, per_weight: 0.8}   # 25→30
     candidates:
       - {code: "034020", name: 두산에너빌리티}
+      - {code: "052690", name: 한전기술}          # 2026-10-31 추가
 
   robotics:
     name: 휴머노이드·피지컬 AI (액추에이터·센서)
@@ -83,6 +88,7 @@ themes:
     candidates:
       - {code: "207940", name: 삼성바이오로직스}
       - {code: "196170", name: 알테오젠}
+      - {code: "068270", name: 셀트리온}          # 2026-10-31 추가
 
   value_up:
     name: 밸류업·주주환원 (금융)
@@ -92,3 +98,36 @@ themes:
     valuation: {target_per: 8, target_pbr: 0.8, per_weight: 0.4}    # 금융은 PBR 위주
     candidates:
       - {code: "105560", name: KB금융}
+      - {code: "055550", name: 신한지주}          # 2026-10-31 추가
+      - {code: "086790", name: 하나금융지주}      # 2026-10-31 추가
+
+  # ---- 2026-10-31 추가 테마 ----
+  battery_ess:
+    name: 2차전지·ESS (AI 데이터센터 전력 저장)
+    stage: next
+    base_score: 62
+    keywords: [ESS 수주, 2차전지, LFP, 전고체 배터리]
+    valuation: {target_per: 35, target_pbr: 2.5, per_weight: 0.6}   # 이익 회복 초기라 PBR 비중을 조금 높게
+    candidates:
+      - {code: "373220", name: LG에너지솔루션}
+      - {code: "006400", name: 삼성SDI}
+
+  auto:
+    name: 자동차 (하이브리드·주주환원)
+    stage: current
+    base_score: 52
+    keywords: [현대차 판매, 하이브리드, 관세 자동차, 자동차 수출]
+    valuation: {target_per: 7, target_pbr: 0.9, per_weight: 0.6}
+    candidates:
+      - {code: "005380", name: 현대차}
+      - {code: "000270", name: 기아}
+      - {code: "012330", name: 현대모비스}
+
+  internet_ai:
+    name: 인터넷·AI 서비스
+    stage: future
+    base_score: 52
+    keywords: [AI 에이전트, 네이버 AI, 검색 광고, 커머스]
+    valuation: {target_per: 22, target_pbr: 1.8, per_weight: 0.8}
+    candidates:
+      - {code: "035420", name: NAVER}

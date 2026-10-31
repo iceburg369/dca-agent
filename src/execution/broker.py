@@ -51,6 +51,13 @@ class PaperBroker:
         self.path = path or STATE_DIR / "paper_account.json"
         if self.path.exists():
             self.acct = json.loads(self.path.read_text(encoding="utf-8"))
+            extra = float(initial_cash) - float(self.acct.get("initial_cash", initial_cash))
+            if extra > 0:   # strategy.yaml 에서 시드를 올리면 차액을 한 번만 입금 (보유 종목·기록은 그대로)
+                self.acct["cash"] += extra
+                self.acct["initial_cash"] = float(initial_cash)
+                self.acct.setdefault("deposits", []).append(
+                    {"date": dt.date.today().isoformat(), "amount": extra, "note": "시드 증액"})
+                self._save()
         else:
             self.acct = {"cash": float(initial_cash), "initial_cash": float(initial_cash), "holdings": {}, "trades": []}
             self._save()

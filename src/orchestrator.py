@@ -107,6 +107,16 @@ def run_analysis(use_llm: bool = True, codes=None, qp=None) -> dict:
     return agent.run(codes)
 
 
+def missing_from_analysis(analysis: dict | None, themes: dict | None = None) -> set[str]:
+    """themes.yaml 에 새로 넣은 종목 중 아직 분석되지 않은 것 (있으면 주간 주기를 기다리지 않고 바로 재분석)."""
+    from .config import load_themes
+
+    themes = load_themes() if themes is None else themes
+    want = {str(c["code"]).zfill(6) for t in themes.values() for c in t.get("candidates", [])}
+    have = {s["code"] for s in (analysis or {}).get("stocks", [])}
+    return want - have
+
+
 def run_daily(force_analysis: bool = False, use_llm: bool = True, dry_run: bool = False) -> dict:
     cfg = load_strategy()
     qp = build_quote_provider(cfg)
@@ -114,7 +124,10 @@ def run_daily(force_analysis: bool = False, use_llm: bool = True, dry_run: bool 
 
     analysis = load_latest()
     age = None if analysis is None else (dt.date.today() - dt.date.fromisoformat(analysis["generated_at"][:10])).days
-    if force_analysis or analysis is None or age >= interval:
+    new_codes = missing_from_analysis(analysis) if analysis else set()
+    if new_codes:
+        log.info("새로 추가된 분석 대상 %d종목 → 바로 재분석", len(new_codes))
+    if force_analysis or analysis is None or age >= interval or new_codes:
         log.info("분석 agent 실행 (마지막 분석: %s일 전)", age)
         analysis = run_analysis(use_llm=use_llm, qp=qp)
     else:

@@ -13,7 +13,10 @@ from src.execution.broker import PaperBroker, round_price, tick_size
 
 @pytest.fixture
 def cfg():
-    return load_strategy()
+    """규칙 테스트용: 계좌 숫자는 테스트를 만든 기준(1,000만원·종목당 18%·최대 5종목)으로 고정."""
+    c = load_strategy()
+    c["account"].update(initial_cash=10_000_000, per_stock_budget_pct=0.18, max_positions=5)
+    return c
 
 
 def ctx(cash=10_000_000, equity=10_000_000, regime="neutral", date="2026-10-05"):
@@ -883,3 +886,36 @@ def test_expensive_share_buys_one_instead_of_silently_skipping(cfg):
     too_big = {**stock, "price": 2_500_000, "fair_value": 3_000_000}      # 종목당 한도(180만) 초과
     orders, alerts = rules.decide(cfg, ctx, too_big, None, rules.new_pstate(), 0)
     assert orders == [] and any("한도" in a for a in alerts)
+
+
+# ---------------------------------------------------------------- 시드 증액 · 종목 확대
+def test_paper_seed_increase_adds_cash_once(cfg, tmp_path):
+    """strategy.yaml 의 initial_cash 를 올리면 기존 가상 계좌에 차액을 한 번만 입금 (보유 종목·기록 유지)."""
+    path = tmp_path / "acct.json"
+    b = PaperBroker(cfg["costs"], 10_000_000, path=path)
+    b.order("buy", "005930", 10, 100_000)
+    cash_before = b.cash()
+    b2 = PaperBroker(cfg["costs"], 30_000_000, path=path)
+    assert b2.cash() == pytest.approx(cash_before + 20_000_000)
+    assert b2.holdings()["005930"]["qty"] == 10 and b2.acct["initial_cash"] == 30_000_000
+    assert b2.acct["deposits"][-1]["amount"] == 20_000_000
+    b3 = PaperBroker(cfg["costs"], 30_000_000, path=path)      # 다시 열어도 또 입금되지 않음
+    assert b3.cash() == pytest.approx(b2.cash())
+
+
+def test_new_theme_stocks_trigger_reanalysis():
+    from src.orchestrator import missing_from_analysis
+
+    themes = {"t": {"candidates": [{"code": "000001"}, {"code": "000002"}]}}
+    assert missing_from_analysis({"stocks": [{"code": "000001"}]}, themes) == {"000002"}
+    assert missing_from_analysis({"stocks": [{"code": "000001"}, {"code": "000002"}]}, themes) == set()
+
+
+def test_universe_expanded_and_codes_valid():
+    from src.config import load_strategy, load_themes
+
+    codes = [c["code"] for t in load_themes().values() for c in t["candidates"]]
+    assert len(codes) >= 30 and len(codes) == len(set(codes))
+    assert all(len(c) == 6 and c.isdigit() for c in codes)
+    a = load_strategy()["account"]
+    assert a["initial_cash"] == 30_000_000 and a["per_stock_budget_pct"] == 0.25 and a["max_positions"] == 4
