@@ -918,4 +918,4 @@ def test_universe_expanded_and_codes_valid():
     assert len(codes) >= 30 and len(codes) == len(set(codes))
     assert all(len(c) == 6 and c.isdigit() for c in codes)
     a = load_strategy()["account"]
-    assert a["initial_cash"] == 30_000_000 and a["per_stock_budget_pct"] == 0.25 and a["max_positions"] == 6
+    assert a["initial_cash"] == 30_000_000 and a["per_stock_budget_pct"] == 0.25 and a["max_positions"] == 4
