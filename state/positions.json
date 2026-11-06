@@ -1,11 +1,11 @@
 {
   "000660": {
-    "tranches": 1,
-    "last_buy_price": 1293291.9999999998,
-    "last_buy_date": "2026-10-26",
-    "peak_qty": 1,
+    "tranches": 2,
+    "last_buy_price": 1124122.9999999998,
+    "last_buy_date": "2026-11-06",
+    "peak_qty": 2,
     "sold_levels": [],
-    "invested": 1293291.9999999998
+    "invested": 2417414.9999999995
   },
   "012450": {
     "tranches": 1,
