@@ -8,12 +8,12 @@
     "invested": 2417414.9999999995
   },
   "012450": {
-    "tranches": 1,
-    "last_buy_price": 760759.9999999999,
-    "last_buy_date": "2026-10-26",
-    "peak_qty": 1,
+    "tranches": 2,
+    "last_buy_price": 640639.9999999999,
+    "last_buy_date": "2026-11-09",
+    "peak_qty": 2,
     "sold_levels": [],
-    "invested": 760759.9999999999
+    "invested": 1401399.9999999998
   },
   "267260": {
     "tranches": 2,
@@ -48,6 +48,14 @@
     "invested": 0.0
   },
   "329180": {
+    "tranches": 0,
+    "last_buy_price": null,
+    "last_buy_date": null,
+    "peak_qty": 0,
+    "sold_levels": [],
+    "invested": 0.0
+  },
+  "298040": {
     "tranches": 0,
     "last_buy_price": null,
     "last_buy_date": null,
