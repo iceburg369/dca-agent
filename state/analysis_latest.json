@@ -1,95 +1,95 @@
 {
-  "generated_at": "2026-11-16T10:07:56",
+  "generated_at": "2026-11-23T10:09:09",
   "llm_used": false,
   "llm_calls": 0,
   "llm_label": "Amazon Nova API (nova-2-lite-v1)",
   "dart_used": true,
   "macro": {
-    "score": 35.0,
+    "score": 30.0,
     "regime": "risk_off",
     "signals": [
-      "코스피 200일선 아래 (5,291 / 6,523)",
-      "코스피 고점 대비 -42% — 약세장 (분할매수에는 기회일 수 있음)",
-      "원/달러 60일 -3.3% — 원화 강세",
-      "미국 10년 금리 5.10% (60일 +0.13%p)"
+      "코스피 200일선 아래 (4,870 / 6,525)",
+      "코스피 고점 대비 -47% — 약세장 (분할매수에는 기회일 수 있음)",
+      "원/달러 60일 -1.7% 안정",
+      "미국 10년 금리 5.04% (60일 +0.08%p)"
     ]
   },
   "themes": {
     "ai_semiconductor": {
       "name": "반도체·AI 인프라 (HBM, 메모리)",
       "stage": "current",
-      "score": 76.5,
-      "rel_strength_90d": -0.069,
+      "score": 75.9,
+      "rel_strength_90d": -0.083,
       "summary": ""
     },
     "power_grid": {
       "name": "전력기기 (변압기·전력망)",
       "stage": "next",
-      "score": 62.1,
-      "rel_strength_90d": -0.198,
+      "score": 63.5,
+      "rel_strength_90d": -0.17,
       "summary": ""
     },
     "shipbuilding": {
       "name": "조선",
       "stage": "next",
-      "score": 52.6,
-      "rel_strength_90d": -0.147,
+      "score": 52.5,
+      "rel_strength_90d": -0.151,
       "summary": ""
     },
     "defense": {
       "name": "방산",
       "stage": "next",
       "score": 48.0,
-      "rel_strength_90d": -0.26,
+      "rel_strength_90d": -0.251,
       "summary": ""
     },
     "nuclear": {
       "name": "원전·SMR",
       "stage": "future",
-      "score": 56.3,
-      "rel_strength_90d": -0.115,
+      "score": 52.0,
+      "rel_strength_90d": -0.211,
       "summary": ""
     },
     "robotics": {
       "name": "휴머노이드·피지컬 AI (액추에이터·센서)",
       "stage": "future",
-      "score": 67.6,
-      "rel_strength_90d": 0.052,
+      "score": 74.2,
+      "rel_strength_90d": 0.185,
       "summary": ""
     },
     "bio": {
       "name": "바이오 (CDMO·플랫폼 기술수출)",
       "stage": "future",
-      "score": 60.1,
-      "rel_strength_90d": 0.101,
+      "score": 59.2,
+      "rel_strength_90d": 0.083,
       "summary": ""
     },
     "value_up": {
       "name": "밸류업·주주환원 (금융)",
       "stage": "current",
-      "score": 62.3,
-      "rel_strength_90d": 0.147,
+      "score": 61.7,
+      "rel_strength_90d": 0.135,
       "summary": ""
     },
     "battery_ess": {
       "name": "2차전지·ESS (AI 데이터센터 전력 저장)",
       "stage": "next",
-      "score": 70.5,
-      "rel_strength_90d": 0.17,
+      "score": 65.4,
+      "rel_strength_90d": 0.067,
       "summary": ""
     },
     "auto": {
       "name": "자동차 (하이브리드·주주환원)",
       "stage": "current",
-      "score": 47.0,
-      "rel_strength_90d": -0.101,
+      "score": 46.4,
+      "rel_strength_90d": -0.112,
       "summary": ""
     },
     "internet_ai": {
       "name": "인터넷·AI 서비스",
       "stage": "future",
-      "score": 53.6,
-      "rel_strength_90d": 0.032,
+      "score": 48.7,
+      "rel_strength_90d": -0.066,
       "summary": ""
     }
   },
@@ -99,9 +99,9 @@
       "name": "HD한국조선해양",
       "theme": "shipbuilding",
       "theme_name": "조선",
-      "price": 238000.0,
-      "per": 7.767877541695225,
-      "pbr": 1.2667457939249427,
+      "price": 216500.0,
+      "per": 7.066157511668135,
+      "pbr": 1.152312875566177,
       "fair_value": 498781,
       "fair_confidence": "high",
       "fair_notes": [
@@ -109,18 +109,18 @@
         "BPS 187,883 × PBR 2 (비중 30%)"
       ],
       "entry_price": 473842,
-      "upside_pct": 1.096,
+      "upside_pct": 1.304,
       "scores": {
-        "macro": 35.0,
-        "theme": 52.6,
+        "macro": 30.0,
+        "theme": 52.5,
         "issue": 94.0,
         "valuation": 100
       },
-      "total": 76.9,
+      "total": 76.1,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [
-        "적정가의 48% 수준 — 가치 함정 또는 재무 데이터 오류 점검 필요"
+        "적정가의 43% 수준 — 가치 함정 또는 재무 데이터 오류 점검 필요"
       ],
       "risks": [],
       "catalysts": [],
@@ -131,9 +131,9 @@
       "name": "현대로템",
       "theme": "defense",
       "theme_name": "방산",
-      "price": 71200.0,
-      "per": 10.092133238837704,
-      "pbr": 2.52383821913438,
+      "price": 57900.0,
+      "per": 8.206945428773919,
+      "pbr": 2.0523909113466376,
       "fair_value": 160848,
       "fair_confidence": "high",
       "fair_notes": [
@@ -141,18 +141,18 @@
         "BPS 28,211 × PBR 3.5 (비중 20%)"
       ],
       "entry_price": 152806,
-      "upside_pct": 1.259,
+      "upside_pct": 1.778,
       "scores": {
-        "macro": 35.0,
+        "macro": 30.0,
         "theme": 48.0,
-        "issue": 78.0,
+        "issue": 74.0,
         "valuation": 100
       },
-      "total": 71.8,
+      "total": 70.0,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [
-        "적정가의 44% 수준 — 가치 함정 또는 재무 데이터 오류 점검 필요"
+        "적정가의 36% 수준 — 가치 함정 또는 재무 데이터 오류 점검 필요"
       ],
       "risks": [],
       "catalysts": [],
@@ -163,9 +163,9 @@
       "name": "삼성SDI",
       "theme": "battery_ess",
       "theme_name": "2차전지·ESS (AI 데이터센터 전력 저장)",
-      "price": 474500.0,
+      "price": 386500.0,
       "per": null,
-      "pbr": 1.7413802594638237,
+      "pbr": 1.4184267023872874,
       "fair_value": 681212,
       "fair_confidence": "medium",
       "fair_notes": [
@@ -173,14 +173,44 @@
         "BPS 272,485 × PBR 2.5 (비중 40%)"
       ],
       "entry_price": 647151,
-      "upside_pct": 0.436,
+      "upside_pct": 0.763,
       "scores": {
-        "macro": 35.0,
-        "theme": 70.5,
+        "macro": 30.0,
+        "theme": 65.4,
         "issue": 50.0,
         "valuation": 100
       },
-      "total": 70.4,
+      "total": 68.3,
+      "verdict": "buy_candidate",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "267260",
+      "name": "HD현대일렉트릭",
+      "theme": "power_grid",
+      "theme_name": "전력기기 (변압기·전력망)",
+      "price": 378500.0,
+      "per": 18.62330249950797,
+      "pbr": 6.715040982152361,
+      "fair_value": 500350,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "× PER 28 (비중 80%)",
+        "BPS 56,366 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 475332,
+      "upside_pct": 0.322,
+      "scores": {
+        "macro": 30.0,
+        "theme": 63.5,
+        "issue": 50.0,
+        "valuation": 98.3
+      },
+      "total": 67.3,
       "verdict": "buy_candidate",
       "thesis_ok": true,
       "flags": [],
@@ -193,9 +223,9 @@
       "name": "기아",
       "theme": "auto",
       "theme_name": "자동차 (하이브리드·주주환원)",
-      "price": 95400.0,
-      "per": 4.99188948772958,
-      "pbr": 0.605883548419876,
+      "price": 85800.0,
+      "per": 4.489560985819685,
+      "pbr": 0.5449141347424042,
       "fair_value": 136950,
       "fair_confidence": "high",
       "fair_notes": [
@@ -203,14 +233,14 @@
         "BPS 157,456 × PBR 0.9 (비중 40%)"
       ],
       "entry_price": 130102,
-      "upside_pct": 0.436,
+      "upside_pct": 0.596,
       "scores": {
-        "macro": 35.0,
-        "theme": 47.0,
+        "macro": 30.0,
+        "theme": 46.4,
         "issue": 50.0,
         "valuation": 100
       },
-      "total": 64.5,
+      "total": 63.6,
       "verdict": "buy_candidate",
       "thesis_ok": true,
       "flags": [],
@@ -223,9 +253,9 @@
       "name": "한화오션",
       "theme": "shipbuilding",
       "theme_name": "조선",
-      "price": 47600.0,
-      "per": 11.706837186424004,
-      "pbr": 2.363690535306386,
+      "price": 40450.0,
+      "per": 9.948352188883424,
+      "pbr": 2.008640381368557,
       "fair_value": 63314,
       "fair_confidence": "high",
       "fair_notes": [
@@ -233,14 +263,14 @@
         "BPS 20,138 × PBR 2 (비중 30%)"
       ],
       "entry_price": 60148,
-      "upside_pct": 0.33,
+      "upside_pct": 0.565,
       "scores": {
-        "macro": 35.0,
-        "theme": 52.6,
+        "macro": 30.0,
+        "theme": 52.5,
         "issue": 40.0,
-        "valuation": 99.5
+        "valuation": 100
       },
-      "total": 63.2,
+      "total": 62.6,
       "verdict": "buy_candidate",
       "thesis_ok": true,
       "flags": [
@@ -252,64 +282,31 @@
       "summary": ""
     },
     {
-      "code": "267260",
-      "name": "HD현대일렉트릭",
-      "theme": "power_grid",
-      "theme_name": "전력기기 (변압기·전력망)",
-      "price": 411000.0,
-      "per": 20.222397165912223,
-      "pbr": 7.291629705851045,
-      "fair_value": 500350,
+      "code": "012450",
+      "name": "한화에어로스페이스",
+      "theme": "defense",
+      "theme_name": "방산",
+      "price": 580000.0,
+      "per": 20.29888356140412,
+      "pbr": 3.0811074987781817,
+      "fair_value": 703231,
       "fair_confidence": "high",
       "fair_notes": [
-        "× PER 28 (비중 80%)",
-        "BPS 56,366 × PBR 4 (비중 20%)"
+        "× PER 25 (비중 80%)",
+        "BPS 188,244 × PBR 3.5 (비중 20%)"
       ],
-      "entry_price": 475332,
-      "upside_pct": 0.217,
+      "entry_price": 668069,
+      "upside_pct": 0.212,
       "scores": {
-        "macro": 35.0,
-        "theme": 62.1,
-        "issue": 50.0,
-        "valuation": 82.6
+        "macro": 30.0,
+        "theme": 48.0,
+        "issue": 62.0,
+        "valuation": 81.9
       },
-      "total": 62.2,
+      "total": 60.7,
       "verdict": "buy_candidate",
       "thesis_ok": true,
       "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "035420",
-      "name": "NAVER",
-      "theme": "internet_ai",
-      "theme_name": "인터넷·AI 서비스",
-      "price": 173700.0,
-      "per": 14.035229476405947,
-      "pbr": 0.9419944033493134,
-      "fair_value": 284200,
-      "fair_confidence": "high",
-      "fair_notes": [
-        "× PER 22 (비중 80%)",
-        "BPS 184,396 × PBR 1.8 (비중 20%)"
-      ],
-      "entry_price": 269990,
-      "upside_pct": 0.636,
-      "scores": {
-        "macro": 35.0,
-        "theme": 53.6,
-        "issue": 20.0,
-        "valuation": 100
-      },
-      "total": 58.6,
-      "verdict": "avoid",
-      "thesis_ok": true,
-      "flags": [
-        "위험 공시: 유상증자또는주식관련사채등의발행결과(자율공시)               (20261106)",
-        "위험 공시: [기재정정]주요사항보고서(유상증자결정) (20261103)"
-      ],
       "risks": [],
       "catalysts": [],
       "summary": ""
@@ -319,9 +316,9 @@
       "name": "현대차",
       "theme": "auto",
       "theme_name": "자동차 (하이브리드·주주환원)",
-      "price": 269500.0,
-      "per": 7.627862217316238,
-      "pbr": 0.6131396160995221,
+      "price": 244000.0,
+      "per": 6.9061164416518075,
+      "pbr": 0.5551245503832407,
       "fair_value": 306625,
       "fair_confidence": "high",
       "fair_notes": [
@@ -329,74 +326,14 @@
         "BPS 439,541 × PBR 0.9 (비중 40%)"
       ],
       "entry_price": 291294,
-      "upside_pct": 0.138,
+      "upside_pct": 0.257,
       "scores": {
-        "macro": 35.0,
-        "theme": 47.0,
+        "macro": 30.0,
+        "theme": 46.4,
         "issue": 50.0,
-        "valuation": 70.7
+        "valuation": 88.5
       },
-      "total": 54.2,
-      "verdict": "watch",
-      "thesis_ok": true,
-      "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "068270",
-      "name": "셀트리온",
-      "theme": "bio",
-      "theme_name": "바이오 (CDMO·플랫폼 기술수출)",
-      "price": 215000.0,
-      "per": 50.73147711184521,
-      "pbr": 2.873486407741039,
-      "fair_value": 212426,
-      "fair_confidence": "high",
-      "fair_notes": [
-        "× PER 45 (비중 80%)",
-        "BPS 74,822 × PBR 4 (비중 20%)"
-      ],
-      "entry_price": 201805,
-      "upside_pct": -0.012,
-      "scores": {
-        "macro": 35.0,
-        "theme": 60.1,
-        "issue": 66.0,
-        "valuation": 48.2
-      },
-      "total": 53.6,
-      "verdict": "watch",
-      "thesis_ok": true,
-      "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "055550",
-      "name": "신한지주",
-      "theme": "value_up",
-      "theme_name": "밸류업·주주환원 (금융)",
-      "price": 90000.0,
-      "per": 8.924144769459593,
-      "pbr": 0.7409358843481411,
-      "fair_value": 90577,
-      "fair_confidence": "high",
-      "fair_notes": [
-        "× PER 8 (비중 40%)",
-        "BPS 121,468 × PBR 0.8 (비중 60%)"
-      ],
-      "entry_price": 86048,
-      "upside_pct": 0.006,
-      "scores": {
-        "macro": 35.0,
-        "theme": 62.3,
-        "issue": 58.0,
-        "valuation": 51.0
-      },
-      "total": 53.2,
+      "total": 59.6,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -409,9 +346,9 @@
       "name": "HD현대중공업",
       "theme": "shipbuilding",
       "theme_name": "조선",
-      "price": 269500.0,
-      "per": 17.163418672780537,
-      "pbr": 3.027239539455209,
+      "price": 243000.0,
+      "per": 15.475735575085976,
+      "pbr": 2.729570345408593,
       "fair_value": 251260,
       "fair_confidence": "high",
       "fair_notes": [
@@ -419,14 +356,14 @@
         "BPS 89,025 × PBR 2 (비중 30%)"
       ],
       "entry_price": 238697,
-      "upside_pct": -0.068,
+      "upside_pct": 0.034,
       "scores": {
-        "macro": 35.0,
-        "theme": 52.6,
+        "macro": 30.0,
+        "theme": 52.5,
         "issue": 82.0,
-        "valuation": 39.8
+        "valuation": 55.1
       },
-      "total": 52.8,
+      "total": 57.4,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -435,28 +372,61 @@
       "summary": ""
     },
     {
-      "code": "086790",
-      "name": "하나금융지주",
+      "code": "035420",
+      "name": "NAVER",
+      "theme": "internet_ai",
+      "theme_name": "인터넷·AI 서비스",
+      "price": 145000.0,
+      "per": 11.716224951519068,
+      "pbr": 0.7863511139070262,
+      "fair_value": 284200,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "× PER 22 (비중 80%)",
+        "BPS 184,396 × PBR 1.8 (비중 20%)"
+      ],
+      "entry_price": 269990,
+      "upside_pct": 0.96,
+      "scores": {
+        "macro": 30.0,
+        "theme": 48.7,
+        "issue": 20.0,
+        "valuation": 100
+      },
+      "total": 56.7,
+      "verdict": "avoid",
+      "thesis_ok": true,
+      "flags": [
+        "위험 공시: 유상증자또는주식관련사채등의발행결과(자율공시)               (20261106)",
+        "위험 공시: [기재정정]주요사항보고서(유상증자결정) (20261103)"
+      ],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "055550",
+      "name": "신한지주",
       "theme": "value_up",
       "theme_name": "밸류업·주주환원 (금융)",
-      "price": 124800.0,
-      "per": 8.844790928419561,
-      "pbr": 0.7573918531825024,
-      "fair_value": 124244,
+      "price": 83200.0,
+      "per": 8.249876053544869,
+      "pbr": 0.6849540619751704,
+      "fair_value": 90577,
       "fair_confidence": "high",
       "fair_notes": [
         "× PER 8 (비중 40%)",
-        "BPS 164,776 × PBR 0.8 (비중 60%)"
+        "BPS 121,468 × PBR 0.8 (비중 60%)"
       ],
-      "entry_price": 118032,
-      "upside_pct": -0.004,
+      "entry_price": 86048,
+      "upside_pct": 0.089,
       "scores": {
-        "macro": 35.0,
-        "theme": 62.3,
+        "macro": 30.0,
+        "theme": 61.7,
         "issue": 58.0,
-        "valuation": 49.3
+        "valuation": 63.3
       },
-      "total": 52.6,
+      "total": 56.6,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -465,28 +435,28 @@
       "summary": ""
     },
     {
-      "code": "012450",
-      "name": "한화에어로스페이스",
-      "theme": "defense",
-      "theme_name": "방산",
-      "price": 663000.0,
-      "per": 23.203723795191266,
-      "pbr": 3.522024606361956,
-      "fair_value": 703231,
+      "code": "068270",
+      "name": "셀트리온",
+      "theme": "bio",
+      "theme_name": "바이오 (CDMO·플랫폼 기술수출)",
+      "price": 201250.0,
+      "per": 47.48702218027371,
+      "pbr": 2.689716928176205,
+      "fair_value": 212426,
       "fair_confidence": "high",
       "fair_notes": [
-        "× PER 25 (비중 80%)",
-        "BPS 188,244 × PBR 3.5 (비중 20%)"
+        "× PER 45 (비중 80%)",
+        "BPS 74,822 × PBR 4 (비중 20%)"
       ],
-      "entry_price": 668069,
-      "upside_pct": 0.061,
+      "entry_price": 201805,
+      "upside_pct": 0.056,
       "scores": {
-        "macro": 35.0,
-        "theme": 48.0,
-        "issue": 58.0,
-        "valuation": 59.1
+        "macro": 30.0,
+        "theme": 59.2,
+        "issue": 66.0,
+        "valuation": 58.3
       },
-      "total": 52.4,
+      "total": 56.2,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -499,9 +469,9 @@
       "name": "현대모비스",
       "theme": "auto",
       "theme_name": "자동차 (하이브리드·주주환원)",
-      "price": 360000.0,
-      "per": 9.07212338087798,
-      "pbr": 0.6529723847095633,
+      "price": 312000.0,
+      "per": 7.862506930094249,
+      "pbr": 0.5659094000816215,
       "fair_value": 365141,
       "fair_confidence": "high",
       "fair_notes": [
@@ -509,14 +479,14 @@
         "BPS 551,325 × PBR 0.9 (비중 40%)"
       ],
       "entry_price": 346884,
-      "upside_pct": 0.014,
+      "upside_pct": 0.17,
       "scores": {
-        "macro": 35.0,
-        "theme": 47.0,
+        "macro": 30.0,
+        "theme": 46.4,
         "issue": 50.0,
-        "valuation": 52.1
+        "valuation": 75.5
       },
-      "total": 47.7,
+      "total": 55.0,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -525,28 +495,28 @@
       "summary": ""
     },
     {
-      "code": "000660",
-      "name": "SK하이닉스",
-      "theme": "ai_semiconductor",
-      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
-      "price": 1169000.0,
-      "per": 19.82868289373251,
-      "pbr": 6.806365028442338,
-      "fair_value": 910782,
+      "code": "086790",
+      "name": "하나금융지주",
+      "theme": "value_up",
+      "theme_name": "밸류업·주주환원 (금융)",
+      "price": 119700.0,
+      "per": 8.48334514528703,
+      "pbr": 0.7264407437976405,
+      "fair_value": 124244,
       "fair_confidence": "high",
       "fair_notes": [
-        "× PER 18 (비중 80%)",
-        "BPS 171,751 × PBR 1.8 (비중 20%)"
+        "× PER 8 (비중 40%)",
+        "BPS 164,776 × PBR 0.8 (비중 60%)"
       ],
-      "entry_price": 865243,
-      "upside_pct": -0.221,
+      "entry_price": 118032,
+      "upside_pct": 0.038,
       "scores": {
-        "macro": 35.0,
-        "theme": 76.5,
+        "macro": 30.0,
+        "theme": 61.7,
         "issue": 58.0,
-        "valuation": 16.9
+        "valuation": 55.7
       },
-      "total": 44.8,
+      "total": 53.9,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -559,9 +529,9 @@
       "name": "한전기술",
       "theme": "nuclear",
       "theme_name": "원전·SMR",
-      "price": 70000.0,
-      "per": 31.33393017009848,
-      "pbr": 4.261017774531288,
+      "price": 59100.0,
+      "per": 26.454789615040287,
+      "pbr": 3.5975164353542732,
       "fair_value": 61830,
       "fair_confidence": "high",
       "fair_notes": [
@@ -569,14 +539,44 @@
         "BPS 16,428 × PBR 2.5 (비중 20%)"
       ],
       "entry_price": 58738,
-      "upside_pct": -0.117,
+      "upside_pct": 0.046,
       "scores": {
-        "macro": 35.0,
-        "theme": 56.3,
+        "macro": 30.0,
+        "theme": 52.0,
         "issue": 54.0,
-        "valuation": 32.5
+        "valuation": 56.9
       },
-      "total": 44.2,
+      "total": 50.9,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "000660",
+      "name": "SK하이닉스",
+      "theme": "ai_semiconductor",
+      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
+      "price": 1073000.0,
+      "per": 18.20032227970486,
+      "pbr": 6.247416317808921,
+      "fair_value": 910782,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "× PER 18 (비중 80%)",
+        "BPS 171,751 × PBR 1.8 (비중 20%)"
+      ],
+      "entry_price": 865243,
+      "upside_pct": -0.151,
+      "scores": {
+        "macro": 30.0,
+        "theme": 75.9,
+        "issue": 58.0,
+        "valuation": 27.3
+      },
+      "total": 47.5,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -589,9 +589,9 @@
       "name": "효성중공업",
       "theme": "power_grid",
       "theme_name": "전력기기 (변압기·전력망)",
-      "price": 1792000.0,
-      "per": 32.14061519146265,
-      "pbr": 7.0954841519668985,
+      "price": 1639000.0,
+      "per": 29.396466684602277,
+      "pbr": 6.489675516224189,
       "fair_value": 1450956,
       "fair_confidence": "high",
       "fair_notes": [
@@ -599,73 +599,14 @@
         "BPS 252,555 × PBR 4 (비중 20%)"
       ],
       "entry_price": 1378408,
-      "upside_pct": -0.19,
+      "upside_pct": -0.115,
       "scores": {
-        "macro": 35.0,
-        "theme": 62.1,
+        "macro": 30.0,
+        "theme": 63.5,
         "issue": 58.0,
-        "valuation": 21.5
+        "valuation": 32.8
       },
-      "total": 42.8,
-      "verdict": "watch",
-      "thesis_ok": true,
-      "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "034020",
-      "name": "두산에너빌리티",
-      "theme": "nuclear",
-      "theme_name": "원전·SMR",
-      "price": 45550.0,
-      "per": null,
-      "pbr": null,
-      "fair_value": 28850,
-      "fair_confidence": "low",
-      "fair_notes": [
-        "재무지표 없음 → 3년 주가 중앙값을 임시 기준으로 사용"
-      ],
-      "entry_price": 27408,
-      "upside_pct": -0.367,
-      "scores": {
-        "macro": 35.0,
-        "theme": 56.3,
-        "issue": 62.0,
-        "valuation": 22.5
-      },
-      "total": 42.7,
-      "verdict": "watch",
-      "thesis_ok": true,
-      "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "009150",
-      "name": "삼성전기",
-      "theme": "ai_semiconductor",
-      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
-      "price": 820000.0,
-      "per": 90.11979338388834,
-      "pbr": 6.49237541764976,
-      "fair_value": 176494,
-      "fair_confidence": "high",
-      "fair_notes": [
-        "× PER 18 (비중 80%)",
-        "BPS 126,302 × PBR 1.8 (비중 20%)"
-      ],
-      "entry_price": 167669,
-      "upside_pct": -0.785,
-      "scores": {
-        "macro": 35.0,
-        "theme": 76.5,
-        "issue": 66.0,
-        "valuation": 0
-      },
-      "total": 40.9,
+      "total": 46.4,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -678,9 +619,9 @@
       "name": "KB금융",
       "theme": "value_up",
       "theme_name": "밸류업·주주환원 (금융)",
-      "price": 160300.0,
-      "per": 10.604657316750464,
-      "pbr": 0.9734679872957266,
+      "price": 146100.0,
+      "per": 9.665255358560465,
+      "pbr": 0.8872343914155063,
       "fair_value": 127412,
       "fair_confidence": "high",
       "fair_notes": [
@@ -688,12 +629,42 @@
         "BPS 164,669 × PBR 0.8 (비중 60%)"
       ],
       "entry_price": 121041,
-      "upside_pct": -0.205,
+      "upside_pct": -0.128,
       "scores": {
-        "macro": 35.0,
-        "theme": 62.3,
+        "macro": 30.0,
+        "theme": 61.7,
         "issue": 50.0,
-        "valuation": 19.2
+        "valuation": 30.8
+      },
+      "total": 43.2,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "009150",
+      "name": "삼성전기",
+      "theme": "ai_semiconductor",
+      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
+      "price": 771000.0,
+      "per": 84.73458621826575,
+      "pbr": 6.104416398790201,
+      "fair_value": 176494,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "× PER 18 (비중 80%)",
+        "BPS 126,302 × PBR 1.8 (비중 20%)"
+      ],
+      "entry_price": 167669,
+      "upside_pct": -0.771,
+      "scores": {
+        "macro": 30.0,
+        "theme": 75.9,
+        "issue": 66.0,
+        "valuation": 0
       },
       "total": 40.0,
       "verdict": "watch",
@@ -708,9 +679,9 @@
       "name": "한미반도체",
       "theme": "ai_semiconductor",
       "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
-      "price": 176800.0,
-      "per": 79.17599641737573,
-      "pbr": 24.292388018686452,
+      "price": 153100.0,
+      "per": 68.56247201074787,
+      "pbr": 21.035998900796923,
       "fair_value": 34775,
       "fair_confidence": "high",
       "fair_notes": [
@@ -718,14 +689,14 @@
         "BPS 7,278 × PBR 1.8 (비중 20%)"
       ],
       "entry_price": 33036,
-      "upside_pct": -0.803,
+      "upside_pct": -0.773,
       "scores": {
-        "macro": 35.0,
-        "theme": 76.5,
+        "macro": 30.0,
+        "theme": 75.9,
         "issue": 58.0,
         "valuation": 0
       },
-      "total": 38.9,
+      "total": 38.0,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -734,88 +705,28 @@
       "summary": ""
     },
     {
-      "code": "010120",
-      "name": "LS ELECTRIC",
-      "theme": "power_grid",
-      "theme_name": "전력기기 (변압기·전력망)",
-      "price": 123900.0,
-      "per": 64.83516483516483,
-      "pbr": 8.900862068965518,
-      "fair_value": 53942,
+      "code": "010140",
+      "name": "삼성중공업",
+      "theme": "shipbuilding",
+      "theme_name": "조선",
+      "price": 14680.0,
+      "per": 23.677419354838708,
+      "pbr": 3.0224418365246035,
+      "fair_value": 10726,
       "fair_confidence": "high",
       "fair_notes": [
-        "× PER 28 (비중 80%)",
-        "BPS 13,920 × PBR 4 (비중 20%)"
+        "× PER 18 (비중 70%)",
+        "BPS 4,857 × PBR 2 (비중 30%)"
       ],
-      "entry_price": 51245,
-      "upside_pct": -0.565,
+      "entry_price": 10190,
+      "upside_pct": -0.269,
       "scores": {
-        "macro": 35.0,
-        "theme": 62.1,
-        "issue": 66.0,
-        "valuation": 0
+        "macro": 30.0,
+        "theme": 52.5,
+        "issue": 62.0,
+        "valuation": 9.6
       },
-      "total": 37.3,
-      "verdict": "watch",
-      "thesis_ok": true,
-      "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "005930",
-      "name": "삼성전자",
-      "theme": "ai_semiconductor",
-      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
-      "price": 202750.0,
-      "per": 30.88817794028032,
-      "pbr": 3.1681172554963513,
-      "fair_value": 117561,
-      "fair_confidence": "high",
-      "fair_notes": [
-        "× PER 18 (비중 80%)",
-        "BPS 63,997 × PBR 1.8 (비중 20%)"
-      ],
-      "entry_price": 111683,
-      "upside_pct": -0.42,
-      "scores": {
-        "macro": 35.0,
-        "theme": 76.5,
-        "issue": 50.0,
-        "valuation": 0
-      },
-      "total": 36.9,
-      "verdict": "watch",
-      "thesis_ok": true,
-      "flags": [],
-      "risks": [],
-      "catalysts": [],
-      "summary": ""
-    },
-    {
-      "code": "277810",
-      "name": "레인보우로보틱스",
-      "theme": "robotics",
-      "theme_name": "휴머노이드·피지컬 AI (액추에이터·센서)",
-      "price": 365500.0,
-      "per": 5006.8493150684935,
-      "pbr": 52.97869256413973,
-      "fair_value": 11199,
-      "fair_confidence": "high",
-      "fair_notes": [
-        "× PER 50 (비중 80%)",
-        "BPS 6,899 × PBR 6 (비중 20%)"
-      ],
-      "entry_price": 10639,
-      "upside_pct": -0.969,
-      "scores": {
-        "macro": 35.0,
-        "theme": 67.6,
-        "issue": 50.0,
-        "valuation": 0
-      },
-      "total": 34.6,
+      "total": 36.5,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -840,12 +751,12 @@
       "entry_price": 39072,
       "upside_pct": -0.829,
       "scores": {
-        "macro": 35.0,
-        "theme": 67.6,
-        "issue": 50.0,
+        "macro": 30.0,
+        "theme": 74.2,
+        "issue": 54.0,
         "valuation": 0
       },
-      "total": 34.6,
+      "total": 36.5,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -854,28 +765,88 @@
       "summary": ""
     },
     {
-      "code": "010140",
-      "name": "삼성중공업",
-      "theme": "shipbuilding",
-      "theme_name": "조선",
-      "price": 16690.0,
-      "per": 26.919354838709676,
-      "pbr": 3.4362775375746346,
-      "fair_value": 10726,
+      "code": "005930",
+      "name": "삼성전자",
+      "theme": "ai_semiconductor",
+      "theme_name": "반도체·AI 인프라 (HBM, 메모리)",
+      "price": 175100.0,
+      "per": 26.675807434491166,
+      "pbr": 2.7360657530821757,
+      "fair_value": 117561,
       "fair_confidence": "high",
       "fair_notes": [
-        "× PER 18 (비중 70%)",
-        "BPS 4,857 × PBR 2 (비중 30%)"
+        "× PER 18 (비중 80%)",
+        "BPS 63,997 × PBR 1.8 (비중 20%)"
       ],
-      "entry_price": 10190,
-      "upside_pct": -0.357,
+      "entry_price": 111683,
+      "upside_pct": -0.329,
       "scores": {
-        "macro": 35.0,
-        "theme": 52.6,
+        "macro": 30.0,
+        "theme": 75.9,
+        "issue": 50.0,
+        "valuation": 0.7
+      },
+      "total": 36.2,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "010120",
+      "name": "LS ELECTRIC",
+      "theme": "power_grid",
+      "theme_name": "전력기기 (변압기·전력망)",
+      "price": 109100.0,
+      "per": 57.09052851909995,
+      "pbr": 7.837643678160919,
+      "fair_value": 53942,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "× PER 28 (비중 80%)",
+        "BPS 13,920 × PBR 4 (비중 20%)"
+      ],
+      "entry_price": 51245,
+      "upside_pct": -0.506,
+      "scores": {
+        "macro": 30.0,
+        "theme": 63.5,
         "issue": 62.0,
         "valuation": 0
       },
-      "total": 33.9,
+      "total": 35.9,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
+      "code": "277810",
+      "name": "레인보우로보틱스",
+      "theme": "robotics",
+      "theme_name": "휴머노이드·피지컬 AI (액추에이터·센서)",
+      "price": 397500.0,
+      "per": 5445.2054794520545,
+      "pbr": 57.617045948688215,
+      "fair_value": 11199,
+      "fair_confidence": "high",
+      "fair_notes": [
+        "× PER 50 (비중 80%)",
+        "BPS 6,899 × PBR 6 (비중 20%)"
+      ],
+      "entry_price": 10639,
+      "upside_pct": -0.972,
+      "scores": {
+        "macro": 30.0,
+        "theme": 74.2,
+        "issue": 50.0,
+        "valuation": 0
+      },
+      "total": 35.5,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [],
@@ -888,9 +859,9 @@
       "name": "LIG넥스원",
       "theme": "defense",
       "theme_name": "방산",
-      "price": 365000.0,
-      "per": 31.6950329975686,
-      "pbr": 5.575498357901169,
+      "price": 332500.0,
+      "per": 28.872872525182355,
+      "pbr": 5.0790498739784615,
       "fair_value": 276146,
       "fair_confidence": "high",
       "fair_notes": [
@@ -898,14 +869,14 @@
         "BPS 65,465 × PBR 3.5 (비중 20%)"
       ],
       "entry_price": 262339,
-      "upside_pct": -0.243,
+      "upside_pct": -0.169,
       "scores": {
-        "macro": 35.0,
+        "macro": 30.0,
         "theme": 48.0,
         "issue": 35.0,
-        "valuation": 13.5
+        "valuation": 24.6
       },
-      "total": 30.7,
+      "total": 33.9,
       "verdict": "watch",
       "thesis_ok": true,
       "flags": [
@@ -916,35 +887,31 @@
       "summary": ""
     },
     {
-      "code": "373220",
-      "name": "LG에너지솔루션",
-      "theme": "battery_ess",
-      "theme_name": "2차전지·ESS (AI 데이터센터 전력 저장)",
-      "price": 319000.0,
-      "per": null,
-      "pbr": 3.6925142665323936,
-      "fair_value": 215978,
-      "fair_confidence": "medium",
+      "code": "034020",
+      "name": "두산에너빌리티",
+      "theme": "nuclear",
+      "theme_name": "원전·SMR",
+      "price": 39050.0,
+      "per": 295.8333333333333,
+      "pbr": 3.2124053965120107,
+      "fair_value": 9246,
+      "fair_confidence": "high",
       "fair_notes": [
-        "적자(EPS≤0) → PER 평가 제외",
-        "BPS 86,391 × PBR 2.5 (비중 40%)"
+        "× PER 30 (비중 80%)",
+        "BPS 12,156 × PBR 2.5 (비중 20%)"
       ],
-      "entry_price": 205179,
-      "upside_pct": -0.323,
+      "entry_price": 8784,
+      "upside_pct": -0.763,
       "scores": {
-        "macro": 35.0,
-        "theme": 70.5,
-        "issue": 9.0,
-        "valuation": 1.6
+        "macro": 30.0,
+        "theme": 52.0,
+        "issue": 62.0,
+        "valuation": 0
       },
-      "total": 25.7,
-      "verdict": "avoid",
-      "thesis_ok": false,
-      "flags": [
-        "위험 공시: 불성실공시법인지정               (20261102)",
-        "위험 공시: 불성실공시법인지정예고               (20261016)",
-        "위험 공시: 횡령ㆍ배임혐의발생               (20261014)"
-      ],
+      "total": 33.0,
+      "verdict": "watch",
+      "thesis_ok": true,
+      "flags": [],
       "risks": [],
       "catalysts": [],
       "summary": ""
@@ -954,9 +921,9 @@
       "name": "삼성바이오로직스",
       "theme": "bio",
       "theme_name": "바이오 (CDMO·플랫폼 기술수출)",
-      "price": 1413500.0,
-      "per": 53.64326375711575,
-      "pbr": 8.845653207839996,
+      "price": 1275000.0,
+      "per": 48.38709677419355,
+      "pbr": 7.978923126986908,
       "fair_value": 1076437,
       "fair_confidence": "high",
       "fair_notes": [
@@ -964,17 +931,18 @@
         "BPS 159,796 × PBR 4 (비중 20%)"
       ],
       "entry_price": 1022615,
-      "upside_pct": -0.238,
+      "upside_pct": -0.156,
       "scores": {
-        "macro": 35.0,
-        "theme": 60.1,
+        "macro": 30.0,
+        "theme": 59.2,
         "issue": 0,
-        "valuation": 14.2
+        "valuation": 26.6
       },
-      "total": 25.2,
+      "total": 28.6,
       "verdict": "avoid",
       "thesis_ok": true,
       "flags": [
+        "위험 공시: 유상증자또는주식관련사채등의발행결과(자율공시)               (20261117)",
         "위험 공시: 유상증자또는주식관련사채등의청약결과(자율공시)               (20261116)",
         "위험 공시: 유상증자또는주식관련사채등의청약결과(자율공시)               (20261111)",
         "위험 공시: 유상증자신주발행가액(안내공시)               (20261105)",
@@ -987,13 +955,47 @@
       "summary": ""
     },
     {
+      "code": "373220",
+      "name": "LG에너지솔루션",
+      "theme": "battery_ess",
+      "theme_name": "2차전지·ESS (AI 데이터센터 전력 저장)",
+      "price": 292000.0,
+      "per": null,
+      "pbr": 3.379981711057865,
+      "fair_value": 215978,
+      "fair_confidence": "medium",
+      "fair_notes": [
+        "적자(EPS≤0) → PER 평가 제외",
+        "BPS 86,391 × PBR 2.5 (비중 40%)"
+      ],
+      "entry_price": 205179,
+      "upside_pct": -0.26,
+      "scores": {
+        "macro": 30.0,
+        "theme": 65.4,
+        "issue": 9.0,
+        "valuation": 10.9
+      },
+      "total": 26.9,
+      "verdict": "avoid",
+      "thesis_ok": false,
+      "flags": [
+        "위험 공시: 불성실공시법인지정               (20261102)",
+        "위험 공시: 불성실공시법인지정예고               (20261016)",
+        "위험 공시: 횡령ㆍ배임혐의발생               (20261014)"
+      ],
+      "risks": [],
+      "catalysts": [],
+      "summary": ""
+    },
+    {
       "code": "196170",
       "name": "알테오젠",
       "theme": "bio",
       "theme_name": "바이오 (CDMO·플랫폼 기술수출)",
-      "price": 174400.0,
-      "per": 86.08094768015795,
-      "pbr": 27.455919395465994,
+      "price": 166700.0,
+      "per": 82.28035538005923,
+      "pbr": 26.243702770780857,
       "fair_value": 78018,
       "fair_confidence": "high",
       "fair_notes": [
@@ -1001,14 +1003,14 @@
         "BPS 6,352 × PBR 4 (비중 20%)"
       ],
       "entry_price": 74117,
-      "upside_pct": -0.553,
+      "upside_pct": -0.532,
       "scores": {
-        "macro": 35.0,
-        "theme": 60.1,
+        "macro": 30.0,
+        "theme": 59.2,
         "issue": 0,
         "valuation": 0
       },
-      "total": 20.3,
+      "total": 19.3,
       "verdict": "avoid",
       "thesis_ok": true,
       "flags": [
